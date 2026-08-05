@@ -232,7 +232,7 @@ tr.modal-row td:first-child{padding-left:28px;color:#666}
           <option value="Pregrado">Pregrado</option>
           <option value="Posgrado">Posgrado</option>
           <option value="Técnico laboral">Técnico Laboral</option>
-          <option value="EDTECH">Soluciones Empresariales</option>
+          <option value="SOL_EMP">Soluciones Empresariales (B2B)</option>
           <option value="Eventos">Eventos</option>
           <option value="Branding">Branding</option>
         </select>
@@ -438,6 +438,7 @@ function processAndRender(){
       nivel:String(r[8]||'').trim(),
       modal:String(r[9]||'').trim(),
       prog:String(r[10]||'').trim(),
+      tipoPauta:String(r[14]||'').trim().toUpperCase(),
       inv:parseInv(r[2]),
       leadsP:parseLeads(r[3]),
       leadsCRM:parseLeads(r[11]),
@@ -449,7 +450,10 @@ function processAndRender(){
     if(fDesde && r.fecha < fDesde) return false;
     if(fHasta && r.fecha > fHasta) return false;
     if(fCanal && r.canal !== fCanal) return false;
-    if(fNivel && r.nivel !== fNivel) return false;
+    if(fNivel){
+      if(fNivel==='SOL_EMP'){ if(r.tipoPauta!=='B2B') return false; }
+      else if(r.nivel !== fNivel) return false;
+    }
     if(fModal && r.modal !== fModal) return false;
     return true;
   });
@@ -502,13 +506,14 @@ function processAndRender(){
     if(!progMap[key]) progMap[key]={
       Programa:r.prog,Nivel:r.nivel,Modal:r.modal,
       inv_total:0,inv_Facebook:0,inv_Google:0,inv_TikTok:0,inv_Linkedin:0,
-      leads_pauta:0,leads_crm:0
+      leads_pauta:0,leads_crm:0,esB2B:false
     };
     const p=progMap[key];
     p.inv_total+=r.inv;
     if(CANALES.includes(r.canal)) p['inv_'+r.canal]=(p['inv_'+r.canal]||0)+r.inv;
     p.leads_pauta+=r.leadsP;
     p.leads_crm+=r.leadsCRM;
+    if(r.tipoPauta==='B2B') p.esB2B=true;
   });
 
   const metaProgMap={};
@@ -650,23 +655,25 @@ const NIVEL_CFG={
   'Pregrado':       {accent:'accent-pre',fill:'fill-pre',  label:'Pregrado'},
   'Posgrado':       {accent:'accent-pos',fill:'fill-pos',  label:'Posgrado'},
   'Técnico laboral':{accent:'accent-tec',fill:'fill-tec',  label:'Técnico Laboral'},
-  'EDTECH':         {accent:'accent-edt',fill:'fill-edt',  label:'Soluciones Empresariales'},
+  'SOL_EMP':        {accent:'accent-edt',fill:'fill-edt',  label:'Soluciones Empresariales'},
   'Eventos':        {accent:'accent-evt',fill:'fill-evt',  label:'Eventos / Branding'},
 };
 function renderNivelKPIs(filtered, metas){
-  const nivelesPrincipales=['Pregrado','Posgrado','Técnico laboral','EDTECH','Eventos'];
+  const nivelesPrincipales=['Pregrado','Posgrado','Técnico laboral','SOL_EMP','Eventos'];
   const cards=nivelesPrincipales.map(nv=>{
     const c=NIVEL_CFG[nv];
     const rows = nv==='Eventos'
       ? filtered.filter(r=>r.nivel==='Eventos'||r.nivel==='Branding')
-      : filtered.filter(r=>r.nivel===nv);
+      : nv==='SOL_EMP'
+        ? filtered.filter(r=>r.tipoPauta==='B2B')
+        : filtered.filter(r=>r.nivel===nv);
     const inv = rows.reduce((a,r)=>a+r.inv,0);
     const lp  = rows.reduce((a,r)=>a+r.leadsP,0);
     const lc  = rows.reduce((a,r)=>a+r.leadsCRM,0);
     const cpl = lp?inv/lp:0;
     const meta = nv==='Eventos'
       ? {inv:(metas['Eventos']?.inv||0)+(metas['Branding']?.inv||0),leads:(metas['Eventos']?.leads||0)+(metas['Branding']?.leads||0)}
-      : metas[nv];
+      : metas[nv]||(nv==='SOL_EMP'?metas['EDTECH']:undefined);
     const pctInv = meta?.inv ? Math.min(inv/meta.inv*100,100) : null;
     const isEvt  = nv==='Eventos';
     const pctLeads = (!isEvt && meta?.leads) ? Math.min(lc/meta.leads*100,100) : null;
@@ -774,7 +781,7 @@ const progSort={
   Pregrado:{col:'inv_total',dir:-1},
   Posgrado:{col:'inv_total',dir:-1},
   'Técnico laboral':{col:'inv_total',dir:-1},
-  EDTECH:{col:'inv_total',dir:-1},
+  SOL_EMP:{col:'inv_total',dir:-1},
   'Eventos/Branding':{col:'inv_total',dir:-1},
 };
 function sortProgGroup(gkey,col){
@@ -788,13 +795,13 @@ function renderAllProgTables(){
     {key:'Pregrado',        cls:'pre',label:'📘 Pregrado',         niveles:['Pregrado']},
     {key:'Posgrado',        cls:'pos',label:'🎓 Posgrado',         niveles:['Posgrado']},
     {key:'Técnico laboral', cls:'tec',label:'🔧 Técnico Laboral',  niveles:['Técnico laboral']},
-    {key:'EDTECH',          cls:'edt',label:'🏢 Soluciones Empresariales', niveles:['EDTECH']},
+    {key:'SOL_EMP',         cls:'edt',label:'🏢 Soluciones Empresariales', niveles:[]},
     {key:'Eventos/Branding',cls:'evt',label:'🎨 Eventos / Branding',niveles:['Eventos','Branding']},
   ];
   $('prog-tables').innerHTML=GRUPOS.map(g=>{
     const s=progSort[g.key]||{col:'inv_total',dir:-1};
     let rows=(window._progData||[])
-      .filter(p=>g.niveles.includes(p.Nivel))
+      .filter(p=>g.key==='SOL_EMP' ? p.esB2B : g.niveles.includes(p.Nivel))
       .filter(p=>!search||p.Programa.toLowerCase().includes(search));
     rows.sort((a,b)=>{
       const av=a[s.col]||0,bv=b[s.col]||0;
