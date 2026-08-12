@@ -515,13 +515,17 @@ function processAndRender(){
     if(!progMap[key]) progMap[key]={
       Programa:r.prog,Nivel:r.nivel,Modal:r.modal,
       inv_total:0,inv_Facebook:0,inv_Google:0,inv_TikTok:0,inv_Linkedin:0,
-      leads_pauta:0,leads_crm:0,esB2B:false
+      leads_pauta:0,leads_crm:0,por_medio:{},esB2B:false
     };
     const p=progMap[key];
     p.inv_total+=r.inv;
     if(CANALES.includes(r.canal)) p['inv_'+r.canal]=(p['inv_'+r.canal]||0)+r.inv;
     p.leads_pauta+=r.leadsP;
     p.leads_crm+=r.leadsCRM;
+    if(!p.por_medio[r.canal]) p.por_medio[r.canal]={inv_total:0,leads_pauta:0,leads_crm:0};
+    p.por_medio[r.canal].inv_total+=r.inv;
+    p.por_medio[r.canal].leads_pauta+=r.leadsP;
+    p.por_medio[r.canal].leads_crm+=r.leadsCRM;
     if(r.tipoPauta==='B2B') p.esB2B=true;
   });
 
@@ -576,7 +580,7 @@ function processAndRender(){
       return {
         Programa:String(metaRow[4]||'').trim(),Nivel:nivel,Modal:String(metaRow[5]||'').trim(),
         inv_total:0,inv_Facebook:0,inv_Google:0,inv_TikTok:0,inv_Linkedin:0,
-        leads_pauta:0,leads_crm:0,meta_leads:meta.leads||0,cumpl_pct:0,
+        leads_pauta:0,leads_crm:0,por_medio:{},meta_leads:meta.leads||0,cumpl_pct:0,
         cpl_pauta:0,cpl_crm:0,conv_pct:0
       };
     }).filter(Boolean);
@@ -801,6 +805,13 @@ function sortProgGroup(gkey,col){
 function renderAllProgTables(){
   const search=($('prog-search')?.value||'').toLowerCase();
   const medio=$('prog-medio')?.value||'';
+  const canalCfg={
+    Facebook:{label:'FB',style:'color:#1877F2'},
+    Google:{label:'GO',style:'color:#EA4335'},
+    TikTok:{label:'TT',style:''},
+    Linkedin:{label:'LI',style:'color:#0077B5'}
+  };
+  const canalesVisibles=medio?[medio]:CANALES;
   const GRUPOS=[
     {key:'Pregrado',        cls:'pre',label:'📘 Pregrado',         niveles:['Pregrado']},
     {key:'Posgrado',        cls:'pos',label:'🎓 Posgrado',         niveles:['Posgrado']},
@@ -810,20 +821,35 @@ function renderAllProgTables(){
   ];
   $('prog-tables').innerHTML=GRUPOS.map(g=>{
     const s=progSort[g.key]||{col:'inv_total',dir:-1};
+    if(medio&&s.col.startsWith('inv_')&&s.col!=='inv_total'&&s.col!=='inv_'+medio){
+      s.col='inv_total';s.dir=-1;
+    }
     let rows=(window._progData||[])
       .filter(p=>g.key==='SOL_EMP' ? p.esB2B : g.niveles.includes(p.Nivel))
       .filter(p=>!search||p.Programa.toLowerCase().includes(search))
-      .filter(p=>!medio||(p['inv_'+medio]||0)>0);
+      .map(p=>{
+        if(!medio) return p;
+        const m=p.por_medio?.[medio];
+        if(!m||!(m.inv_total||m.leads_pauta||m.leads_crm)) return null;
+        return {
+          ...p,
+          inv_total:m.inv_total,
+          leads_pauta:m.leads_pauta,
+          leads_crm:m.leads_crm,
+          cpl_pauta:m.leads_pauta?m.inv_total/m.leads_pauta:0,
+          cpl_crm:m.leads_crm?m.inv_total/m.leads_crm:0,
+          conv_pct:m.leads_pauta?m.leads_crm/m.leads_pauta*100:0,
+          cumpl_pct:p.meta_leads?Math.min(m.leads_crm/p.meta_leads*100,100):null
+        };
+      })
+      .filter(Boolean);
     rows.sort((a,b)=>{
       const av=a[s.col]||0,bv=b[s.col]||0;
       return typeof av==='string'?av.localeCompare(bv)*s.dir:(av-bv)*s.dir;
     });
     const isEvt=g.key==='Eventos/Branding';
     const tI =rows.reduce((a,r)=>a+(r.inv_total||0),0);
-    const tFB=rows.reduce((a,r)=>a+(r.inv_Facebook||0),0);
-    const tGO=rows.reduce((a,r)=>a+(r.inv_Google||0),0);
-    const tTT=rows.reduce((a,r)=>a+(r.inv_TikTok||0),0);
-    const tLI=rows.reduce((a,r)=>a+(r.inv_Linkedin||0),0);
+    const totalesCanal=Object.fromEntries(canalesVisibles.map(c=>[c,rows.reduce((a,r)=>a+(r['inv_'+c]||0),0)]));
     const tLP=rows.reduce((a,r)=>a+(r.leads_pauta||0),0);
     const tLC=rows.reduce((a,r)=>a+(r.leads_crm||0),0);
     const tML=rows.reduce((a,r)=>a+(r.meta_leads||0),0);
@@ -834,14 +860,12 @@ function renderAllProgTables(){
         onclick="sortProgGroup('${g.key}','${col}')">${lbl}${act?(s.dir>0?' ↑':' ↓'):''}</th>`;
     };
     const tbody=rows.map(p=>{
+      const invCanales=canalesVisibles.map(c=>`<td class="num" style="${canalCfg[c].style}">${fmtCOP(p['inv_'+c])}</td>`).join('');
       const base=`
         <td style="min-width:160px;font-weight:600;max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${p.Programa}">${p.Programa}</td>
         <td>${badge(p.Modal)}</td>
         <td class="num bold">${fmtCOP(p.inv_total)}</td>
-        <td class="num" style="color:#1877F2">${fmtCOP(p.inv_Facebook)}</td>
-        <td class="num" style="color:#EA4335">${fmtCOP(p.inv_Google)}</td>
-        <td class="num">${fmtCOP(p.inv_TikTok)}</td>
-        <td class="num" style="color:#0077B5">${fmtCOP(p.inv_Linkedin)}</td>`;
+        ${invCanales}`;
       const extra=isEvt?'':` 
         <td class="num">${fmtNz(p.leads_pauta)}</td>
         <td class="num" style="color:#B8860B;font-weight:700">${fmtCOP(p.cpl_pauta)}</td>
@@ -854,12 +878,10 @@ function renderAllProgTables(){
     const totRow=isEvt
       ?`<tr class="total-row"><td colspan="2">TOTAL (${rows.length})</td>
          <td class="num yellow">${fmtCOP(tI)}</td>
-         <td class="num yellow">${fmtCOP(tFB)}</td><td class="num yellow">${fmtCOP(tGO)}</td>
-         <td class="num yellow">${fmtCOP(tTT)}</td><td class="num yellow">${fmtCOP(tLI)}</td></tr>`
+         ${canalesVisibles.map(c=>`<td class="num yellow">${fmtCOP(totalesCanal[c])}</td>`).join('')}</tr>`
       :`<tr class="total-row"><td colspan="2">TOTAL (${rows.length})</td>
          <td class="num yellow">${fmtCOP(tI)}</td>
-         <td class="num yellow">${fmtCOP(tFB)}</td><td class="num yellow">${fmtCOP(tGO)}</td>
-         <td class="num yellow">${fmtCOP(tTT)}</td><td class="num yellow">${fmtCOP(tLI)}</td>
+         ${canalesVisibles.map(c=>`<td class="num yellow">${fmtCOP(totalesCanal[c])}</td>`).join('')}
          <td class="num yellow">${fmtNz(tLP)}</td>
          <td class="num yellow">${fmtCOP(tLP?tI/tLP:0)}</td>
          <td class="num yellow">${fmtNz(tLC)}</td>
@@ -881,10 +903,7 @@ function renderAllProgTables(){
             ${th('Programa','Programa',false)}
             ${th('Modal','Modalidad',false)}
             ${th('inv_total','Inv. Total',true)}
-            <th class="num sortable" style="color:#1877F2" onclick="sortProgGroup('${g.key}','inv_Facebook')">FB</th>
-            <th class="num sortable" style="color:#EA4335" onclick="sortProgGroup('${g.key}','inv_Google')">GO</th>
-            <th class="num sortable" onclick="sortProgGroup('${g.key}','inv_TikTok')">TT</th>
-            <th class="num sortable" style="color:#0077B5" onclick="sortProgGroup('${g.key}','inv_Linkedin')">LI</th>
+            ${canalesVisibles.map(c=>th('inv_'+c,canalCfg[c].label,true,canalCfg[c].style)).join('')}
             ${extraH}
           </tr></thead>
           <tbody>${tbody}${totRow}</tbody>
