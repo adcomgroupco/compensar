@@ -141,6 +141,8 @@ tr.modal-row td:first-child{padding-left:28px;color:#666}
 .prog-controls{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
 .prog-search{flex:1;min-width:180px;background:var(--white);border:1px solid var(--gray-200);font-family:'Poppins',sans-serif;font-size:12px;padding:8px 12px;border-radius:var(--r-sm);outline:none}
 .prog-search:focus{border-color:var(--yellow)}
+.prog-filter{min-width:150px;background:var(--white);border:1px solid var(--gray-200);font-family:'Poppins',sans-serif;font-size:12px;padding:8px 12px;border-radius:var(--r-sm);outline:none;cursor:pointer}
+.prog-filter:focus{border-color:var(--yellow)}
 .badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
 .b-Virtual{background:#DBEAFE;color:#1E40AF}
 .b-Presencial{background:#D1FAE5;color:#065F46}
@@ -297,6 +299,13 @@ tr.modal-row td:first-child{padding-left:28px;color:#666}
       <div class="section-title">Detalle por Programa</div>
       <div class="prog-controls">
         <input class="prog-search" type="text" id="prog-search" placeholder="Buscar programa..." oninput="renderAllProgTables()">
+        <select class="prog-filter" id="prog-medio" aria-label="Filtrar por medio" onchange="renderAllProgTables()">
+          <option value="">Todos los medios</option>
+          <option value="Facebook">Facebook</option>
+          <option value="Google">Google</option>
+          <option value="TikTok">TikTok</option>
+          <option value="Linkedin">LinkedIn</option>
+        </select>
       </div>
       <div id="prog-tables"></div>
     </div>
@@ -791,6 +800,7 @@ function sortProgGroup(gkey,col){
 }
 function renderAllProgTables(){
   const search=($('prog-search')?.value||'').toLowerCase();
+  const medio=$('prog-medio')?.value||'';
   const GRUPOS=[
     {key:'Pregrado',        cls:'pre',label:'📘 Pregrado',         niveles:['Pregrado']},
     {key:'Posgrado',        cls:'pos',label:'🎓 Posgrado',         niveles:['Posgrado']},
@@ -802,7 +812,8 @@ function renderAllProgTables(){
     const s=progSort[g.key]||{col:'inv_total',dir:-1};
     let rows=(window._progData||[])
       .filter(p=>g.key==='SOL_EMP' ? p.esB2B : g.niveles.includes(p.Nivel))
-      .filter(p=>!search||p.Programa.toLowerCase().includes(search));
+      .filter(p=>!search||p.Programa.toLowerCase().includes(search))
+      .filter(p=>!medio||(p['inv_'+medio]||0)>0);
     rows.sort((a,b)=>{
       const av=a[s.col]||0,bv=b[s.col]||0;
       return typeof av==='string'?av.localeCompare(bv)*s.dir:(av-bv)*s.dir;
