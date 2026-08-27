@@ -303,6 +303,7 @@ body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--blac
     <div class="sb-report-label">Reporte activo</div>
     <select class="report-select" onchange="changeReport(this.value)">
       <option value="junio2026" selected>Estado de cuenta — Jun 2026</option>
+      <option value="linkedin-b2b">LinkedIn B2B — Jul–Ago 2026</option>
       <option value="coming">Próximo reporte...</option>
     </select>
   </div>
@@ -329,6 +330,18 @@ body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--blac
     </a>
     <a class="sb-nav-item" href="#repositorio" onclick="scrollTo('repositorio')">
       <span class="sb-nav-dot"></span>Repositorio
+    </a>
+    <a class="sb-nav-item" href="#li-resumen" onclick="document.querySelector('.report-select').value='linkedin-b2b';scrollTo('li-resumen')">
+      <span class="sb-nav-dot"></span>LinkedIn B2B · Resumen
+    </a>
+    <a class="sb-nav-item" href="#li-creativos" onclick="document.querySelector('.report-select').value='linkedin-b2b';scrollTo('li-creativos')">
+      <span class="sb-nav-dot"></span>Creativos y atribución
+    </a>
+    <a class="sb-nav-item" href="#li-audiencia" onclick="document.querySelector('.report-select').value='linkedin-b2b';scrollTo('li-audiencia')">
+      <span class="sb-nav-dot"></span>Audiencia B2B
+    </a>
+    <a class="sb-nav-item" href="#li-recomendaciones" onclick="document.querySelector('.report-select').value='linkedin-b2b';scrollTo('li-recomendaciones')">
+      <span class="sb-nav-dot"></span>Plan de mejora
     </a>
   </nav>
 
@@ -390,7 +403,7 @@ body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--blac
 <div class="main">
 
   <!-- ══ 1. RESUMEN EJECUTIVO ══ -->
-  <section class="section" id="resumen" data-section="resumen">
+  <section class="section" id="resumen" data-section="resumen" data-report="general">
     <div class="sec-eyebrow"><span class="sec-eyebrow-dot"></span>01 — Resumen Ejecutivo</div>
     <h2 class="sec-title">Estado de Cuenta · Junio 2026</h2>
     <p class="sec-subtitle editable-comment" data-key="subtitle-resumen" contenteditable="false" oninput="saveComment(this)">Resultados consolidados del periodo 2026-2 (febrero – mayo 2026). Inversión acumulada, captación de leads y métricas de eficiencia por canal.</p>
@@ -443,7 +456,7 @@ body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--blac
   </section>
 
   <!-- ══ 2. LÍNEA DE TIEMPO ══ -->
-  <section class="section" id="timeline" data-section="timeline">
+  <section class="section" id="timeline" data-section="timeline" data-report="general">
     <div class="sec-eyebrow"><span class="sec-eyebrow-dot"></span>02 — Línea de Tiempo</div>
     <h2 class="sec-title">Evolución del Proyecto</h2>
     <p class="sec-subtitle">Hitos clave desde el inicio de la relación ADCOM × U.Compensar hasta el estado actual.</p>
@@ -542,7 +555,7 @@ body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--blac
   </section>
 
   <!-- ══ 3. HISTÓRICO ══ -->
-  <section class="section" id="historico" data-section="historico">
+  <section class="section" id="historico" data-section="historico" data-report="general">
     <div class="sec-eyebrow"><span class="sec-eyebrow-dot"></span>03 — Evolución Histórica</div>
     <h2 class="sec-title">Resultados por Periodo</h2>
     <p class="sec-subtitle">Comparativo de KPIs clave a través de todos los periodos gestionados desde 2023-2.</p>
@@ -646,7 +659,7 @@ body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--blac
   </section>
 
   <!-- ══ 4. RESULTADOS 2026-2 ══ -->
-  <section class="section" id="resultados" data-section="resultados">
+  <section class="section" id="resultados" data-section="resultados" data-report="general">
     <div class="sec-eyebrow"><span class="sec-eyebrow-dot"></span>04 — Resultados 2026-2</div>
     <h2 class="sec-title">Período Activo: Feb – May 2026</h2>
     <p class="sec-subtitle editable-comment" data-key="subtitle-resultados" contenteditable="false" oninput="saveComment(this)">Detalle de inversión, leads y CPL mes a mes y por canal para el periodo en curso.</p>
@@ -843,7 +856,7 @@ body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--blac
   </section>
 
   <!-- ══ 5. EMBUDO ══ -->
-  <section class="section" id="embudo" data-section="embudo">
+  <section class="section" id="embudo" data-section="embudo" data-report="general">
     <div class="sec-eyebrow"><span class="sec-eyebrow-dot"></span>05 — Embudo de Conversión</div>
     <h2 class="sec-title">Progresión del Funnel · 2026-2</h2>
     <p class="sec-subtitle editable-comment" data-key="subtitle-embudo" contenteditable="false" oninput="saveComment(this)">Comparativo entre el embudo total (canales pagos + orgánicos) y el embudo exclusivo de canales pagos.</p>
@@ -999,7 +1012,7 @@ body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--blac
   </section>
 
   <!-- ══ 6. PRÓXIMOS PASOS ══ -->
-  <section class="section" id="pasos" data-section="pasos">
+  <section class="section" id="pasos" data-section="pasos" data-report="general">
     <div class="sec-eyebrow"><span class="sec-eyebrow-dot"></span>06 — Próximos Pasos</div>
     <h2 class="sec-title">Estrategia y Entregables</h2>
     <p class="sec-subtitle editable-comment" data-key="subtitle-pasos" contenteditable="false" oninput="saveComment(this)">Acciones en curso y pendientes para el cierre del periodo 2026-2.</p>
@@ -1074,7 +1087,7 @@ body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--blac
   </section>
 
   <!-- ══ 7. REPOSITORIO ══ -->
-  <section class="section" id="repositorio" data-section="repositorio">
+  <section class="section" id="repositorio" data-section="repositorio" data-report="general">
     <div class="sec-eyebrow"><span class="sec-eyebrow-dot"></span>07 — Repositorio</div>
     <h2 class="sec-title">Herramientas y Documentación</h2>
     <p class="sec-subtitle">Acceso centralizado a todos los recursos operativos del proyecto.</p>
@@ -1125,12 +1138,283 @@ body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--blac
     </div>
   </section>
 
+<!-- LINKEDIN_B2B_REPORT_START -->
+  <style id="linkedin-b2b-report-styles">
+    .report-hidden{display:none!important}.sb-nav{overflow-y:auto}
+    .li-report-note{font-size:11px;color:var(--gray-400);line-height:1.65;margin-top:12px}
+    .li-status-line{display:flex;gap:8px;flex-wrap:wrap;margin:-10px 0 24px}
+    .li-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:var(--gray-100);font-size:10px;font-weight:700;color:var(--gray-600)}
+    .li-chip.active{background:#e8f5e9;color:#1b6b31}.li-chip.warn{background:#fff4d6;color:#7a5600}
+    .li-kpi-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:24px}
+    .li-kpi{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--r-lg);padding:20px;position:relative;overflow:hidden}
+    .li-kpi.primary{background:var(--black);border-color:var(--black)}.li-kpi.primary .li-kpi-label,.li-kpi.primary .li-kpi-note{color:var(--gray-400)}.li-kpi.primary .li-kpi-value{color:var(--yellow)}
+    .li-kpi-label{font-size:10px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.08em}
+    .li-kpi-value{font-size:27px;font-weight:800;color:var(--black);margin:6px 0 2px;letter-spacing:-.03em}
+    .li-kpi-note{font-size:10px;color:var(--gray-400);line-height:1.4}
+    .li-verdict{display:grid;grid-template-columns:4px 1fr;gap:18px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--r-lg);padding:22px;margin:20px 0 28px}
+    .li-verdict-bar{background:var(--yellow);border-radius:99px}.li-verdict h3{font-size:17px;margin:0 0 7px}.li-verdict p{font-size:12px;line-height:1.75;color:var(--gray-600);margin:0}
+    .li-grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:20px 0}
+    .li-panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--r-lg);padding:22px}
+    .li-panel h3{font-size:13px;margin:0 0 4px}.li-panel-sub{font-size:10px;color:var(--gray-400);margin-bottom:18px}
+    .li-table-wrap{overflow-x:auto;margin:18px 0 28px}.li-table-note{display:block;font-size:9px;color:var(--gray-400);font-weight:400;margin-top:3px;white-space:nowrap}
+    .li-rule-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:16px 0 28px}
+    .li-rule-card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--r-lg);padding:20px}.li-rule-type{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--gray-400)}
+    .li-rule-card h4{font-size:14px;margin:5px 0 12px}.li-rule-total{font-size:22px;font-weight:800}.li-rule-split{display:flex;gap:16px;margin:12px 0;font-size:11px;color:var(--gray-600)}.li-rule-split strong{color:var(--black)}.li-rule-card p{font-size:9px;color:var(--gray-400);margin:0}
+    .li-audience-row{margin:0 0 16px}.li-audience-head{display:flex;justify-content:space-between;gap:12px;font-size:11px}.li-audience-head span{font-weight:600}.li-audience-head strong{white-space:nowrap}
+    .li-mini-track{height:6px;background:var(--gray-100);border-radius:99px;overflow:hidden;margin:6px 0}.li-mini-track span{display:block;height:100%;background:var(--yellow);border-radius:99px}
+    .li-audience-meta{font-size:9px;color:var(--gray-400)}
+    .li-alert{background:#fff8e1;border:1px solid #ffe08a;border-radius:var(--r-lg);padding:18px 20px;margin:18px 0;font-size:11px;line-height:1.7;color:#654b00}
+    .li-rec-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:20px 0}
+    .li-rec{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--r-lg);padding:20px}.li-rec-priority{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:#8a6000}.li-rec h3{font-size:14px;margin:6px 0 8px}.li-rec p{font-size:11px;line-height:1.7;color:var(--gray-600);margin:0}
+    .li-rec-impact{display:inline-block;margin-top:12px;padding:4px 8px;background:var(--gray-100);border-radius:99px;font-size:9px;font-weight:700;color:var(--gray-600)}
+    .li-source{background:var(--black);color:var(--gray-400);border-radius:var(--r-lg);padding:18px 20px;font-size:10px;line-height:1.7;margin-top:24px}.li-source strong{color:var(--white)}.li-source a{color:var(--yellow)}
+    @media(max-width:900px){.li-kpi-grid{grid-template-columns:repeat(2,1fr)}.li-grid-2,.li-rule-grid,.li-rec-grid{grid-template-columns:1fr}}
+    @media(max-width:600px){.li-kpi-grid{grid-template-columns:1fr}}
+  </style>
+
+  <section class="section report-hidden" id="li-resumen" data-section="li-resumen" data-report="linkedin-b2b">
+    <div class="sec-eyebrow"><span class="sec-eyebrow-dot"></span>08 — LinkedIn B2B</div>
+    <h2 class="sec-title">Soluciones empresariales B2B</h2>
+    <p class="sec-subtitle">Resultados acumulados del 24 Jul 2026 al 26 Aug 2026. Se excluye el día en curso para evitar una lectura parcial.</p>
+    <div class="li-status-line">
+      <span class="li-chip active">● Campaña ACTIVE</span>
+      <span class="li-chip">Objetivo: WEBSITE_VISIT</span>
+      <span class="li-chip">Optimización: MAX_CLICK</span>
+      <span class="li-chip">Presupuesto diario actual: $300.000</span>
+    </div>
+    <div class="li-kpi-grid">
+      <article class="li-kpi primary"><div class="li-kpi-label">Inversión</div><div class="li-kpi-value">$16.044.277</div><div class="li-kpi-note">34 días calendario de campaña</div></article>
+      <article class="li-kpi"><div class="li-kpi-label">Impresiones</div><div class="li-kpi-value">1.298.364</div><div class="li-kpi-note">CPM $12.357</div></article>
+      <article class="li-kpi"><div class="li-kpi-label">Clics al sitio</div><div class="li-kpi-value">6.111</div><div class="li-kpi-note">CTR 0,47% · CPC $2.625</div></article>
+      <article class="li-kpi"><div class="li-kpi-label">Conversiones atribuidas</div><div class="li-kpi-value">173</div><div class="li-kpi-note">CPA atribuido $92.741</div></article>
+      <article class="li-kpi"><div class="li-kpi-label">Conversiones post-clic</div><div class="li-kpi-value">26</div><div class="li-kpi-note">CPA estricto $617.088</div></article>
+      <article class="li-kpi"><div class="li-kpi-label">Engagement total</div><div class="li-kpi-value">14.358</div><div class="li-kpi-note">2.088 clics a la página de empresa</div></article>
+    </div>
+    <div class="li-verdict">
+      <div class="li-verdict-bar"></div>
+      <div><h3>Buena visibilidad y tráfico; la señal de negocio todavía necesita depuración.</h3><p>La campaña sostiene 0,47% de CTR y $2.625 de CPC. Sin embargo, 85,0% de las conversiones atribuidas son post-view: hubo exposición al anuncio, pero no clic previo. Para decisiones de inversión conviene usar las 26 conversiones post-clic como lectura conservadora hasta reconciliar el resultado con CRM.</p></div>
+    </div>
+  </section>
+
+  <section class="section report-hidden" id="li-creativos" data-section="li-creativos" data-report="linkedin-b2b">
+    <div class="sec-eyebrow"><span class="sec-eyebrow-dot"></span>09 — Desempeño</div>
+    <h2 class="sec-title">Creativos, atribución y ritmo</h2>
+    <p class="sec-subtitle">La optimización no debe mirar solo clics: el diferencial aparece al separar conversiones post-clic y post-view.</p>
+    <div class="li-table-wrap"><table class="data-table"><thead><tr><th>Creativo</th><th>Inversión</th><th>Impresiones</th><th>Clics</th><th>CTR</th><th>CPC</th><th>Conv. atrib.</th><th>Post-clic</th><th>CPA post-clic</th></tr></thead><tbody><tr><td><strong>Imagen_50horas</strong><small class='li-table-note'>ID 1474684704 · ACTIVE</small></td><td>$8.629.060<small class='li-table-note'>53,8% del gasto</small></td><td>713.027</td><td>3.366</td><td>0,47%</td><td>$2.564</td><td>87<small class='li-table-note'>75 post-view</small></td><td>12</td><td>$719.088</td></tr><tr><td><strong>Imagen_resolvemos</strong><small class='li-table-note'>ID 1474712284 · ACTIVE</small></td><td>$3.057.839<small class='li-table-note'>19,1% del gasto</small></td><td>233.812</td><td>1.181</td><td>0,51%</td><td>$2.589</td><td>39<small class='li-table-note'>29 post-view</small></td><td>10</td><td>$305.784</td></tr><tr><td><strong>Imagen_fortalezca</strong><small class='li-table-note'>ID 1474528894 · ACTIVE</small></td><td>$2.286.571<small class='li-table-note'>14,3% del gasto</small></td><td>174.680</td><td>775</td><td>0,44%</td><td>$2.950</td><td>29<small class='li-table-note'>26 post-view</small></td><td>3</td><td>$762.190</td></tr><tr><td><strong>Imagen_fortalezca</strong><small class='li-table-note'>ID 1486960434 · ACTIVE</small></td><td>$2.070.807<small class='li-table-note'>12,9% del gasto</small></td><td>176.845</td><td>789</td><td>0,45%</td><td>$2.625</td><td>18<small class='li-table-note'>17 post-view</small></td><td>1</td><td>$2.070.807</td></tr></tbody></table></div>
+    <div class="li-verdict"><div class="li-verdict-bar"></div><div><h3>Imagen_resolvemos es la mejor señal de intención.</h3><p>Con 19,1% del gasto produjo 10 conversiones post-clic y un CPA estricto de $305.784. En contraste, Imagen_fortalezca registra $2.070.807 por conversión post-clic.</p></div></div>
+    <h3 style="font-size:13px;margin:26px 0 8px">Qué está contando LinkedIn como conversión</h3>
+    <div class="li-rule-grid">
+            <article class="li-rule-card">
+              <div class="li-rule-type">SIGN_UP · INSIGHT_TAG_URL_MATCH_RULES</div>
+              <h4>Pagina de gracias</h4>
+              <div class="li-rule-total">162 conversiones atribuidas</div>
+              <div class="li-rule-split">
+                <span><strong>24</strong> post-clic</span>
+                <span><strong>138</strong> post-view</span>
+              </div>
+              <p>Ventanas: 30 días post-clic · 7 días post-view.</p>
+            </article>
+            <article class="li-rule-card">
+              <div class="li-rule-type">LEAD · INSIGHT_TAG_WEBSITE_SIGNAL</div>
+              <h4>auto-created - Lead</h4>
+              <div class="li-rule-total">11 conversiones atribuidas</div>
+              <div class="li-rule-split">
+                <span><strong>2</strong> post-clic</span>
+                <span><strong>9</strong> post-view</span>
+              </div>
+              <p>Ventanas: 30 días post-clic · 7 días post-view.</p>
+            </article></div>
+    <h3 style="font-size:13px;margin:26px 0 8px">Evolución semanal</h3>
+    <div class="li-table-wrap"><table class="data-table"><thead><tr><th>Semana</th><th>Días con entrega</th><th>Inversión</th><th>Clics</th><th>CTR</th><th>CPC</th><th>Conv. post-clic</th></tr></thead><tbody><tr><td>24 Jul – 30 Jul</td><td>7/7</td><td>$3.678.814</td><td>1.413</td><td>0,48%</td><td>$2.604</td><td>1</td></tr><tr><td>31 Jul – 06 Aug</td><td>7/7</td><td>$3.528.057</td><td>1.424</td><td>0,48%</td><td>$2.478</td><td>5</td></tr><tr><td>07 Aug – 13 Aug</td><td>7/7</td><td>$3.541.463</td><td>1.300</td><td>0,47%</td><td>$2.724</td><td>6</td></tr><tr><td>14 Aug – 20 Aug</td><td>7/7</td><td>$3.510.041</td><td>1.312</td><td>0,45%</td><td>$2.675</td><td>8</td></tr><tr><td>21 Aug – 26 Aug</td><td>5/6</td><td>$1.785.904</td><td>662</td><td>0,47%</td><td>$2.698</td><td>6</td></tr></tbody></table></div>
+    <div class="li-alert"><strong>Control de pacing:</strong> El último bloque tuvo entrega 5 de 6 días; revisar la interrupción antes de escalar.</div>
+  </section>
+
+  <section class="section report-hidden" id="li-audiencia" data-section="li-audiencia" data-report="linkedin-b2b">
+    <div class="sec-eyebrow"><span class="sec-eyebrow-dot"></span>10 — Calidad de audiencia</div>
+    <h2 class="sec-title">¿A quién está llegando la campaña?</h2>
+    <p class="sec-subtitle">Distribución profesional estimada por LinkedIn. Estas métricas son aproximadas y pueden tener entre 12 y 24 horas de retraso.</p>
+    <div class="li-alert"><strong>Hallazgo de estructura:</strong> la segmentación agrupa múltiples facetas dentro de un mismo OR. Un miembro puede entrar por interés, grupo, industria o título sin cumplir seniority ni tamaño de empresa. En los perfiles con seniority identificable, Entry + Senior concentran 83,3% de los clics.</div>
+    <div class="li-grid-2">
+      <div class="li-panel"><h3>Seniority</h3><div class="li-panel-sub">Prioridad para validar poder de decisión</div>
+            <div class="li-audience-row">
+              <div class="li-audience-head"><span>Entry</span><strong>1.753 clics</strong></div>
+              <div class="li-mini-track"><span style="width:100.0%"></span></div>
+              <div class="li-audience-meta">383.318 impresiones · 50 conv. atribuidas</div>
+            </div>
+            <div class="li-audience-row">
+              <div class="li-audience-head"><span>Senior</span><strong>1.475 clics</strong></div>
+              <div class="li-mini-track"><span style="width:84.1%"></span></div>
+              <div class="li-audience-meta">329.510 impresiones · 26 conv. atribuidas</div>
+            </div>
+            <div class="li-audience-row">
+              <div class="li-audience-head"><span>Manager</span><strong>288 clics</strong></div>
+              <div class="li-mini-track"><span style="width:16.4%"></span></div>
+              <div class="li-audience-meta">58.510 impresiones · 6 conv. atribuidas</div>
+            </div>
+            <div class="li-audience-row">
+              <div class="li-audience-head"><span>Director</span><strong>139 clics</strong></div>
+              <div class="li-mini-track"><span style="width:7.9%"></span></div>
+              <div class="li-audience-meta">34.264 impresiones · 4 conv. atribuidas</div>
+            </div>
+            <div class="li-audience-row">
+              <div class="li-audience-head"><span>Owner</span><strong>58 clics</strong></div>
+              <div class="li-mini-track"><span style="width:3.3%"></span></div>
+              <div class="li-audience-meta">10.085 impresiones · 0 conv. atribuidas</div>
+            </div>
+            <div class="li-audience-row">
+              <div class="li-audience-head"><span>VP</span><strong>58 clics</strong></div>
+              <div class="li-mini-track"><span style="width:3.3%"></span></div>
+              <div class="li-audience-meta">10.050 impresiones · 0 conv. atribuidas</div>
+            </div>
+            <div class="li-audience-row">
+              <div class="li-audience-head"><span>CXO</span><strong>43 clics</strong></div>
+              <div class="li-mini-track"><span style="width:2.5%"></span></div>
+              <div class="li-audience-meta">9.289 impresiones · 0 conv. atribuidas</div>
+            </div>
+            <div class="li-audience-row">
+              <div class="li-audience-head"><span>Training</span><strong>34 clics</strong></div>
+              <div class="li-mini-track"><span style="width:1.9%"></span></div>
+              <div class="li-audience-meta">6.954 impresiones · 0 conv. atribuidas</div>
+            </div></div>
+      <div class="li-panel"><h3>Tamaño de empresa</h3><div class="li-panel-sub">Composición por clics e impresiones</div>
+            <div class="li-audience-row">
+              <div class="li-audience-head"><span>1.001–5.000 empleados</span><strong>613 clics</strong></div>
+              <div class="li-mini-track"><span style="width:96.4%"></span></div>
+              <div class="li-audience-meta">156.177 impresiones · 17 conv. atribuidas</div>
+            </div>
+            <div class="li-audience-row">
+              <div class="li-audience-head"><span>501–1.000 empleados</span><strong>435 clics</strong></div>
+              <div class="li-mini-track"><span style="width:68.4%"></span></div>
+              <div class="li-audience-meta">90.895 impresiones · 11 conv. atribuidas</div>
+            </div>
+            <div class="li-audience-row">
+              <div class="li-audience-head"><span>201–500 empleados</span><strong>428 clics</strong></div>
+              <div class="li-mini-track"><span style="width:67.3%"></span></div>
+              <div class="li-audience-meta">101.132 impresiones · 11 conv. atribuidas</div>
+            </div>
+            <div class="li-audience-row">
+              <div class="li-audience-head"><span>10.001+ empleados</span><strong>636 clics</strong></div>
+              <div class="li-mini-track"><span style="width:100.0%"></span></div>
+              <div class="li-audience-meta">148.775 impresiones · 9 conv. atribuidas</div>
+            </div>
+            <div class="li-audience-row">
+              <div class="li-audience-head"><span>11–50 empleados</span><strong>417 clics</strong></div>
+              <div class="li-mini-track"><span style="width:65.6%"></span></div>
+              <div class="li-audience-meta">92.724 impresiones · 9 conv. atribuidas</div>
+            </div>
+            <div class="li-audience-row">
+              <div class="li-audience-head"><span>51–200 empleados</span><strong>563 clics</strong></div>
+              <div class="li-mini-track"><span style="width:88.5%"></span></div>
+              <div class="li-audience-meta">118.107 impresiones · 7 conv. atribuidas</div>
+            </div>
+            <div class="li-audience-row">
+              <div class="li-audience-head"><span>2–10 empleados</span><strong>266 clics</strong></div>
+              <div class="li-mini-track"><span style="width:41.8%"></span></div>
+              <div class="li-audience-meta">58.515 impresiones · 5 conv. atribuidas</div>
+            </div>
+            <div class="li-audience-row">
+              <div class="li-audience-head"><span>5.001–10.000 empleados</span><strong>278 clics</strong></div>
+              <div class="li-mini-track"><span style="width:43.7%"></span></div>
+              <div class="li-audience-meta">62.951 impresiones · 3 conv. atribuidas</div>
+            </div></div>
+      <div class="li-panel"><h3>Industrias principales</h3><div class="li-panel-sub">Sectores con mayor respuesta</div>
+            <div class="li-audience-row">
+              <div class="li-audience-head"><span>Business Consulting and Services</span><strong>1.644 clics</strong></div>
+              <div class="li-mini-track"><span style="width:100.0%"></span></div>
+              <div class="li-audience-meta">351.331 impresiones · 25 conv. atribuidas</div>
+            </div>
+            <div class="li-audience-row">
+              <div class="li-audience-head"><span>Technology, Information and Internet</span><strong>1.052 clics</strong></div>
+              <div class="li-mini-track"><span style="width:64.0%"></span></div>
+              <div class="li-audience-meta">223.815 impresiones · 14 conv. atribuidas</div>
+            </div>
+            <div class="li-audience-row">
+              <div class="li-audience-head"><span>Professional Services</span><strong>235 clics</strong></div>
+              <div class="li-mini-track"><span style="width:14.3%"></span></div>
+              <div class="li-audience-meta">45.983 impresiones · 14 conv. atribuidas</div>
+            </div>
+            <div class="li-audience-row">
+              <div class="li-audience-head"><span>Accounting</span><strong>376 clics</strong></div>
+              <div class="li-mini-track"><span style="width:22.9%"></span></div>
+              <div class="li-audience-meta">72.256 impresiones · 13 conv. atribuidas</div>
+            </div>
+            <div class="li-audience-row">
+              <div class="li-audience-head"><span>Higher Education</span><strong>447 clics</strong></div>
+              <div class="li-mini-track"><span style="width:27.2%"></span></div>
+              <div class="li-audience-meta">93.097 impresiones · 12 conv. atribuidas</div>
+            </div>
+            <div class="li-audience-row">
+              <div class="li-audience-head"><span>Construction</span><strong>223 clics</strong></div>
+              <div class="li-mini-track"><span style="width:13.6%"></span></div>
+              <div class="li-audience-meta">47.861 impresiones · 12 conv. atribuidas</div>
+            </div>
+            <div class="li-audience-row">
+              <div class="li-audience-head"><span>IT Services and IT Consulting</span><strong>678 clics</strong></div>
+              <div class="li-mini-track"><span style="width:41.2%"></span></div>
+              <div class="li-audience-meta">152.692 impresiones · 11 conv. atribuidas</div>
+            </div></div>
+      <div class="li-panel"><h3>Funciones principales</h3><div class="li-panel-sub">Rol profesional de quienes interactúan</div>
+            <div class="li-audience-row">
+              <div class="li-audience-head"><span>Operations</span><strong>445 clics</strong></div>
+              <div class="li-mini-track"><span style="width:100.0%"></span></div>
+              <div class="li-audience-meta">99.394 impresiones · 21 conv. atribuidas</div>
+            </div>
+            <div class="li-audience-row">
+              <div class="li-audience-head"><span>Community and Social Services</span><strong>143 clics</strong></div>
+              <div class="li-mini-track"><span style="width:32.1%"></span></div>
+              <div class="li-audience-meta">29.038 impresiones · 9 conv. atribuidas</div>
+            </div>
+            <div class="li-audience-row">
+              <div class="li-audience-head"><span>Engineering</span><strong>268 clics</strong></div>
+              <div class="li-mini-track"><span style="width:60.2%"></span></div>
+              <div class="li-audience-meta">62.777 impresiones · 8 conv. atribuidas</div>
+            </div>
+            <div class="li-audience-row">
+              <div class="li-audience-head"><span>Education</span><strong>347 clics</strong></div>
+              <div class="li-mini-track"><span style="width:78.0%"></span></div>
+              <div class="li-audience-meta">72.550 impresiones · 7 conv. atribuidas</div>
+            </div>
+            <div class="li-audience-row">
+              <div class="li-audience-head"><span>Sales</span><strong>277 clics</strong></div>
+              <div class="li-mini-track"><span style="width:62.2%"></span></div>
+              <div class="li-audience-meta">61.571 impresiones · 7 conv. atribuidas</div>
+            </div>
+            <div class="li-audience-row">
+              <div class="li-audience-head"><span>Business Development</span><strong>320 clics</strong></div>
+              <div class="li-mini-track"><span style="width:71.9%"></span></div>
+              <div class="li-audience-meta">72.723 impresiones · 6 conv. atribuidas</div>
+            </div>
+            <div class="li-audience-row">
+              <div class="li-audience-head"><span>Accounting</span><strong>195 clics</strong></div>
+              <div class="li-mini-track"><span style="width:43.8%"></span></div>
+              <div class="li-audience-meta">40.504 impresiones · 5 conv. atribuidas</div>
+            </div></div>
+    </div>
+    <div class="li-alert"><strong>Tráfico interno:</strong> las empresas relacionadas con Compensar acumulan al menos 48 clics y 8 conversiones atribuidas en el corte demográfico. Deben excluirse del análisis de adquisición y, si es posible, de la pauta.</div>
+  </section>
+
+  <section class="section report-hidden" id="li-recomendaciones" data-section="li-recomendaciones" data-report="linkedin-b2b">
+    <div class="sec-eyebrow"><span class="sec-eyebrow-dot"></span>11 — Plan de mejora</div>
+    <h2 class="sec-title">Qué haríamos para mejorar</h2>
+    <p class="sec-subtitle">Acciones ordenadas por impacto y dependencia. No se realizaron cambios en la cuenta durante la elaboración del reporte.</p>
+    <div class="li-rec-grid">
+      <article class="li-rec"><div class="li-rec-priority">P0 · Medición</div><h3>Reconciliar las 173 conversiones con CRM</h3><p>Separar “Página de gracias” y “auto-created Lead” por UTM/campaign/creative. Reportar post-clic y post-view por separado, y validar cuántas terminaron como contacto comercial real.</p><span class="li-rec-impact">Evita optimizar sobre atribución inflada</span></article>
+      <article class="li-rec"><div class="li-rec-priority">P0 · Audiencia</div><h3>Excluir tráfico interno</h3><p>Crear exclusiones por empresas UCompensar/Compensar y revisar visitas internas a la página de gracias. Hoy aparecen señales de conversión atribuida desde colaboradores.</p><span class="li-rec-impact">Mejora la calidad de la señal</span></article>
+      <article class="li-rec"><div class="li-rec-priority">P1 · Segmentación</div><h3>Pasar de un OR amplio a audiencias AND</h3><p>Separar tres pruebas: decisores de Talento/Operaciones, dueños de pyme y responsables corporativos 201–1.000 empleados. En cada una exigir función o título AND seniority AND tamaño de empresa.</p><span class="li-rec-impact">Más relevancia B2B y menos dispersión</span></article>
+      <article class="li-rec"><div class="li-rec-priority">P1 · Creatividad</div><h3>Escalar “Resolvemos” y renovar “Fortalezca”</h3><p>Mover gradualmente 25–35% del gasto de la variante con peor CPA post-clic hacia Imagen_resolvemos, manteniendo “50 horas” como control de volumen. Probar casos de uso, prueba social y CTA de diagnóstico.</p><span class="li-rec-impact">Mejor señal post-clic sin perder escala</span></article>
+      <article class="li-rec"><div class="li-rec-priority">P1 · Objetivo</div><h3>Abrir test de conversión o Lead Gen</h3><p>La campaña actual optimiza MAX_CLICK bajo objetivo WEBSITE_VISIT. Una vez depurada la medición, comparar ese control contra Website Conversion o Lead Gen Form para alimentar al algoritmo con una señal más cercana al negocio.</p><span class="li-rec-impact">Alinea la entrega con demanda real</span></article>
+      <article class="li-rec"><div class="li-rec-priority">P2 · Operación</div><h3>Estabilizar el pacing</h3><p>El último bloque tuvo entrega 5 de 6 días; revisar la interrupción antes de escalar. Mantener control diario de gasto, clics, conversiones post-clic y frecuencia de pausa para distinguir aprendizaje de problemas de entrega.</p><span class="li-rec-impact">Evita semanas incomparables</span></article>
+    </div>
+    <div class="li-source"><strong>Fuente:</strong> LinkedIn Marketing API, cuenta UCompensar (Oficial), campaña Campaña-general_B2B_Soluciones-empresariales_ADE_linkedin_Trafico_Compensar. Corte generado 2026-08-27T19:15:35+00:00. Las métricas demográficas de LinkedIn son aproximadas; para inversión y conversiones se usa el agregado de campaña, no la suma de cortes demográficos. Documentación: <a href="https://learn.microsoft.com/en-us/linkedin/marketing/integrations/ads-reporting/ads-reporting" target="_blank">LinkedIn Ads Reporting</a>.</div>
+  </section>
+<!-- LINKEDIN_B2B_REPORT_END -->
+
 </div><!-- /main -->
 
 <script>
 // ── Scroll spy + nav active ──
 const sections = document.querySelectorAll('.section[data-section]');
-const navItems = document.querySelectorAll('.sb-nav-item');
+let navItems = document.querySelectorAll('.sb-nav-item');
 
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
@@ -1182,12 +1466,69 @@ function scrollTo(id) {
 }
 
 // ── Report selector ──
+// REPORT_VIEWS_START
+const REPORT_VIEWS = {
+  junio2026: {
+    group: 'general',
+    first: 'resumen',
+    items: [
+      ['resumen','Resumen Ejecutivo'], ['timeline','Línea de Tiempo'],
+      ['historico','Evolución Histórica'], ['resultados','Resultados 2026-2'],
+      ['embudo','Embudo de Conversión'], ['pasos','Próximos Pasos'],
+      ['repositorio','Repositorio']
+    ]
+  },
+  'linkedin-b2b': {
+    group: 'linkedin-b2b',
+    first: 'li-resumen',
+    items: [
+      ['li-resumen','Resumen B2B'], ['li-creativos','Creativos y atribución'],
+      ['li-audiencia','Audiencia B2B'], ['li-recomendaciones','Plan de mejora']
+    ]
+  }
+};
+
+function renderReportNav(value) {
+  const report = REPORT_VIEWS[value];
+  const nav = document.getElementById('sidebar-nav');
+  nav.innerHTML = report.items.map(([id, label], index) =>
+    `<a class="sb-nav-item ${index === 0 ? 'active' : ''}" href="#${id}" data-target="${id}"><span class="sb-nav-dot"></span>${label}</a>`
+  ).join('');
+  navItems = document.querySelectorAll('.sb-nav-item');
+  navItems.forEach(item => item.addEventListener('click', event => {
+    event.preventDefault();
+    const target = document.getElementById(item.dataset.target);
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }));
+}
+
+function activateReport(value, shouldScroll = true) {
+  const selected = REPORT_VIEWS[value] ? value : 'junio2026';
+  const report = REPORT_VIEWS[selected];
+  document.querySelectorAll('.section[data-report]').forEach(section => {
+    section.classList.toggle('report-hidden', section.dataset.report !== report.group);
+  });
+  document.querySelector('.report-select').value = selected;
+  renderReportNav(selected);
+  const url = new URL(window.location.href);
+  if (selected === 'linkedin-b2b') url.searchParams.set('report', selected);
+  else url.searchParams.delete('report');
+  history.replaceState(null, '', url);
+  if (shouldScroll) {
+    const target = document.getElementById(report.first);
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
 function changeReport(val) {
   if (val === 'coming') {
     alert('Próximo reporte aún no disponible.');
-    document.querySelector('.report-select').value = 'junio2026';
+    activateReport('junio2026');
+    return;
   }
+  activateReport(val);
 }
+// REPORT_VIEWS_END
 
 // ══ PDF EXPORT ════════════════════════════════════════════════════
 async function exportPDF() {
@@ -1202,7 +1543,10 @@ async function exportPDF() {
     const wrapper = document.createElement('div');
     wrapper.style.cssText = 'position:fixed;top:0;left:-9999px;width:900px;background:#F8F8F8;padding:40px 48px;font-family:Poppins,sans-serif;box-sizing:border-box;';
 
-    const sectionIds = ['resumen','timeline','historico','resultados','embudo','pasos','repositorio'];
+    const selectedReport = document.querySelector('.report-select').value;
+    const sectionIds = selectedReport === 'linkedin-b2b'
+      ? ['li-resumen','li-creativos','li-audiencia','li-recomendaciones']
+      : ['resumen','timeline','historico','resultados','embudo','pasos','repositorio'];
     sectionIds.forEach(id => {
       const el = document.getElementById(id);
       if (!el) return;
@@ -1253,7 +1597,7 @@ async function exportPDF() {
       offsetPx += slicePx;
       firstPage = false;
     }
-    pdf.save('Compensar_EstadoDeCuenta_Junio2026.pdf');
+    pdf.save(selectedReport === 'linkedin-b2b' ? 'Compensar_LinkedIn_B2B_2026-07-24_a_2026-08-26.pdf' : 'Compensar_EstadoDeCuenta_Junio2026.pdf');
   } catch(err) { console.error(err); alert('Error generando PDF: ' + err.message); }
   overlay.classList.remove('active');
 }
@@ -1435,6 +1779,9 @@ document.getElementById('publish-modal').addEventListener('click', function(e) {
 
 // ── INIT ──
 loadSavedComments();
+const initialReport = new URLSearchParams(window.location.search).get('report') === 'linkedin-b2b'
+  ? 'linkedin-b2b' : 'junio2026';
+activateReport(initialReport, false);
 </script>
 </body>
 </html>
