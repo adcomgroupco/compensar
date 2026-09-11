@@ -43,7 +43,7 @@ body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--blac
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23FFC000' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat:no-repeat;background-position:right 10px center;padding-right:28px
 }
-.report-select:focus{outline:none;border-color:var(--yellow)}
+.report-select:focus{outline:none;border-color:var(--accent-fg)}
 
 /* Nav */
 .sb-nav{padding:16px 0;flex:1}
@@ -54,7 +54,7 @@ body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--blac
   text-decoration:none;cursor:pointer;transition:all .2s;border-left:2px solid transparent
 }
 .sb-nav-item:hover{color:var(--white);background:rgba(255,255,255,.04)}
-.sb-nav-item.active{color:var(--yellow);border-left-color:var(--yellow);background:rgba(255,212,0,.06);font-weight:600}
+.sb-nav-item.active{color:var(--accent);border-left-color:var(--accent-fg);background:rgba(255,212,0,.06);font-weight:600}
 .sb-nav-dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
 
 /* Download btn */
@@ -93,7 +93,7 @@ body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--blac
 .kpi-label{font-size:12px;font-weight:700;color:var(--fg-muted);margin-bottom:8px}
 .kpi-card.accent .kpi-label{color:rgba(255,255,255,.5)}
 .kpi-val{font-size:30px;font-weight:800;color:var(--black);line-height:1}
-.kpi-card.accent .kpi-val{color:var(--yellow)}
+.kpi-card.accent .kpi-val{color:var(--accent-fg)}
 .kpi-sub{font-size:12px;color:var(--fg-muted);margin-top:6px;font-weight:500}
 .kpi-card.accent .kpi-sub{color:rgba(255,255,255,.4)}
 .kpi-trend{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;margin-top:8px;padding:3px 8px;border-radius:var(--radius)}
@@ -111,7 +111,7 @@ body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--blac
   background:var(--white);border:2px solid var(--gray-200);
   display:flex;align-items:center;justify-content:center
 }
-.tl-dot.active{background:var(--yellow);border-color:var(--yellow)}
+.tl-dot.active{background:var(--yellow);border-color:var(--accent-fg)}
 .tl-dot.milestone{background:var(--black);border-color:var(--black)}
 .tl-dot svg{width:10px;height:10px}
 .tl-period{font-size:12px;font-weight:700;color:var(--fg-muted);margin-bottom:4px}
@@ -164,7 +164,7 @@ body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--blac
 .data-table td{padding:10px 14px;border-bottom:1px solid var(--gray-100);text-align:right;color:var(--gray-600)}
 .data-table td:first-child{text-align:left;font-weight:600;color:var(--black)}
 .data-table tr.subtotal td{background:var(--gray-50);font-weight:700;color:var(--black)}
-.data-table tr.grand-total td{background:var(--black);color:var(--yellow);font-weight:700}
+.data-table tr.grand-total td{background:var(--black);color:var(--accent);font-weight:700}
 .data-table tr.group-header td{background:var(--gray-50);font-size:12px;font-weight:700;color:var(--fg-muted);padding:8px 14px}
 .data-table tr:hover:not(.subtotal):not(.grand-total):not(.group-header) td{background:rgba(255,212,0,.03)}
 
@@ -230,7 +230,7 @@ body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--blac
 /* ── PDF OVERLAY ── */
 #pdf-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:999;align-items:center;justify-content:center;flex-direction:column;gap:16px}
 #pdf-overlay.active{display:flex}
-.pdf-spinner{width:44px;height:44px;border:3px solid #333;border-top-color:var(--yellow);border-radius:50%;animation:spin .8s linear infinite}
+.pdf-spinner{width:44px;height:44px;border:3px solid #333;border-top-color:var(--accent-fg);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .pdf-msg{color:var(--white);font-size:13px;font-weight:600;font-family:'Poppins',sans-serif}
 
@@ -242,8 +242,8 @@ body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--blac
   color:var(--gray-400);cursor:pointer;display:flex;align-items:center;
   justify-content:center;gap:7px;transition:.2s;width:calc(100% - 40px)
 }
-.btn-edit:hover{border-color:var(--yellow);color:var(--yellow)}
-.btn-edit.active{border-color:var(--yellow);color:var(--yellow);background:rgba(255,212,0,.08)}
+.btn-edit:hover{border-color:var(--accent-fg);color:var(--accent-fg)}
+.btn-edit.active{border-color:var(--accent-fg);color:var(--accent-fg);background:rgba(255,212,0,.08)}
 .edit-mode .editable-comment{cursor:text;border-radius:var(--radius-sm);transition:.2s}
 .edit-mode .editable-comment:hover{background:rgba(255,212,0,.08);outline:1.5px dashed rgba(255,212,0,.5)}
 .edit-mode .editable-comment:focus{background:rgba(255,212,0,.06);outline:2px solid var(--yellow);padding:4px 6px}
@@ -258,7 +258,7 @@ body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--blac
 .modal h3{font-size:16px;font-weight:800;margin-bottom:6px;font-family:'Poppins',sans-serif}
 .modal p{font-size:12px;color:var(--gray-400);margin-bottom:20px;line-height:1.5}
 .modal input{width:100%;padding:11px 14px;border:1.5px solid var(--gray-200);border-radius:var(--r-sm);font-family:'Poppins',sans-serif;font-size:13px;outline:none;margin-bottom:8px}
-.modal input:focus{border-color:var(--yellow)}
+.modal input:focus{border-color:var(--accent-fg)}
 .modal-error{font-size:12px;color:#c62828;height:16px;margin-bottom:12px}
 .modal-btns{display:flex;gap:10px}
 .modal-btn{flex:1;padding:11px;border-radius:var(--r-sm);font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:.2s;border:none}
@@ -680,7 +680,7 @@ body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--blac
         <div class="mes-leads">2.082 leads CRM · 6.124 plataforma</div>
         <div class="mes-cpl">CPL CRM: $31.279</div>
       </div>
-      <div class="mes-card" style="border-color:var(--yellow)">
+      <div class="mes-card" style="border-color:var(--accent-fg)">
         <div class="mes-name" style="color:#8a6000">Abril 2026 ★</div>
         <div class="mes-inv">$139.044.873</div>
         <div class="mes-leads">6.862 leads CRM · 10.833 plataforma</div>
@@ -1148,7 +1148,7 @@ body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--blac
     .li-chip.active{background:#e8f5e9;color:#1b6b31}.li-chip.warn{background:#fff4d6;color:#7a5600}
     .li-kpi-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:24px}
     .li-kpi{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--r-lg);padding:20px;position:relative;overflow:hidden}
-    .li-kpi.primary{background:var(--black);border-color:var(--black)}.li-kpi.primary .li-kpi-label,.li-kpi.primary .li-kpi-note{color:var(--gray-400)}.li-kpi.primary .li-kpi-value{color:var(--yellow)}
+    .li-kpi.primary{background:var(--black);border-color:var(--black)}.li-kpi.primary .li-kpi-label,.li-kpi.primary .li-kpi-note{color:var(--gray-400)}.li-kpi.primary .li-kpi-value{color:var(--accent-fg)}
     .li-kpi-label{font-size:12px;font-weight:700;color:var(--gray-400);letter-spacing:.08em}
     .li-kpi-value{font-size:27px;font-weight:800;color:var(--black);margin:6px 0 2px;letter-spacing:-.03em}
     .li-kpi-note{font-size:12px;color:var(--gray-400);line-height:1.4}
@@ -1168,7 +1168,7 @@ body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--blac
     .li-rec-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:20px 0}
     .li-rec{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--r-lg);padding:20px}.li-rec-priority{font-size:12px;font-weight:800;color:#8a6000}.li-rec h3{font-size:14px;margin:6px 0 8px}.li-rec p{font-size:12px;line-height:1.7;color:var(--gray-600);margin:0}
     .li-rec-impact{display:inline-block;margin-top:12px;padding:4px 8px;background:var(--gray-100);border-radius:999px;font-size:12px;font-weight:700;color:var(--gray-600)}
-    .li-source{background:var(--black);color:var(--gray-400);border-radius:var(--r-lg);padding:18px 20px;font-size:12px;line-height:1.7;margin-top:24px}.li-source strong{color:var(--white)}.li-source a{color:var(--yellow)}
+    .li-source{background:var(--black);color:var(--gray-400);border-radius:var(--r-lg);padding:18px 20px;font-size:12px;line-height:1.7;margin-top:24px}.li-source strong{color:var(--white)}.li-source a{color:var(--accent-fg)}
     @media(max-width:900px){.li-kpi-grid{grid-template-columns:repeat(2,1fr)}.li-grid-2,.li-rule-grid,.li-rec-grid{grid-template-columns:1fr}}
     @media(max-width:600px){.li-kpi-grid{grid-template-columns:1fr}}
   </style>

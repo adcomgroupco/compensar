@@ -64,18 +64,18 @@
   .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,212,0,.15); border: 1px solid rgba(255,212,0,.3); border-radius: var(--radius); padding: 6px 14px; margin-bottom: 24px }
   .hero-eyebrow-dot { width: 6px; height: 6px; background: var(--yellow); border-radius: 50%; animation: pulse 2s infinite }
   @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1) } 50% { opacity: .5; transform: scale(.8) } }
-  .hero-eyebrow-text { font-size: 12px; font-weight: 600; color: var(--yellow) }
+  .hero-eyebrow-text { font-size: 12px; font-weight: 600; color:var(--accent-fg) }
   .hero-title { font-size: 64px; font-weight: 900; color: var(--white); line-height: 1; letter-spacing: -.02em; margin-bottom: 8px }
-  .hero-title span { color: var(--yellow) }
+  .hero-title span { color:var(--accent-fg) }
   .hero-subtitle { font-size: 18px; color: rgba(255,255,255,.5); font-weight: 400; margin-bottom: 48px;max-width:var(--measure)}
   .hero-kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px }
   .hero-kpi { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); border-radius: var(--radius-lg); padding: 24px; position: relative; overflow: hidden; transition: transform .2s, background .2s }
   .hero-kpi:hover { background: rgba(255,255,255,.08); transform: translateY(-2px) }
   .hero-kpi-label { font-size: 12px; font-weight: 600; color: rgba(255,255,255,.4); margin-bottom: 10px }
   .hero-kpi-value { font-size: 28px; font-weight: 800; color: var(--white); line-height: 1; margin-bottom: 4px }
-  .hero-kpi-value.accent { color: var(--yellow) }
+  .hero-kpi-value.accent { color:var(--accent-fg) }
   .hero-kpi-sub { font-size: 12px; color: rgba(255,255,255,.4); line-height: 1.4 }
-  .hero-kpi-badge { position: absolute; top: 16px; right: 16px; background: rgba(255,212,0,.15); color: var(--yellow); font-size: 12px; font-weight: 700; padding: 3px 8px; border-radius: var(--radius-sm) }
+  .hero-kpi-badge { position: absolute; top: 16px; right: 16px; background: rgba(255,212,0,.15); color:var(--accent); font-size: 12px; font-weight: 700; padding: 3px 8px; border-radius: var(--radius-sm) }
 
   /* KPI CARDS */
   .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px }
@@ -121,7 +121,7 @@
   .month-bars { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 24px }
   .month-bar-item { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-md); padding: 20px 16px; text-align: center; transition: transform .2s }
   .month-bar-item:hover { transform: translateY(-2px) }
-  .month-bar-item.peak { border-color: var(--yellow); border-width: 2px }
+  .month-bar-item.peak { border-color:var(--accent-fg); border-width: 2px }
   .month-bar-name { font-size: 12px; font-weight: 700; color:var(--fg-muted); margin-bottom: 12px }
   .month-bar-chart { height: 80px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: 10px }
   .month-bar-fill { width: 32px; background: var(--gray-200); border-radius: 0 0 0 0; transition: height 1s ease, background .2s }
@@ -163,7 +163,7 @@
   .journey-step:hover .journey-dot { transform: scale(1.05) }
   .journey-dot svg { width: 24px; height: 24px; color: var(--gray-400) }
   .journey-step.active .journey-dot { background: var(--black); border-color: var(--black) }
-  .journey-step.active .journey-dot svg { color: var(--yellow) }
+  .journey-step.active .journey-dot svg { color:var(--accent-fg) }
   .journey-label { font-size: 12px; font-weight: 700; color: var(--black); text-align: center; margin-bottom: 8px; line-height: 1.3 }
   .journey-channel { font-size: 12px; color:var(--fg-muted); text-align: center; line-height: 1.5 }
   .journey-channel strong { display: block; color: var(--black); font-weight: 600; font-size: 12px }
@@ -192,7 +192,7 @@
   .com-card-header { display: flex; align-items: center; gap: 12px; padding: 16px 20px; border-bottom: 1px solid var(--gray-100) }
   .com-ch-logo { width: 32px; height: 32px; object-fit: contain; border-radius: var(--radius-sm); flex-shrink:0 }
   .com-ch-name { font-size: 14px; font-weight: 700; color: var(--black) }
-  .com-ch-tag { margin-left: auto; font-size: 12px; font-weight: 700; background: var(--black); color: var(--yellow); padding: 3px 10px; border-radius: var(--radius) }
+  .com-ch-tag { margin-left: auto; font-size: 12px; font-weight: 700; background: var(--black); color:var(--accent); padding: 3px 10px; border-radius: var(--radius) }
   .com-card-body { padding: 16px 20px }
   .com-row { margin-bottom: 14px }
   .com-row:last-child { margin-bottom: 0 }
@@ -207,7 +207,7 @@
   .branding-budget-card { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 24px }
   .branding-total-card { background: var(--black); border-radius: var(--radius-lg); padding: 24px 32px; text-align: center }
   .branding-total-label { font-size: 12px; font-weight: 700; color: rgba(255,255,255,.5); margin-bottom: 8px }
-  .branding-total-value { font-size: 28px; font-weight: 900; color: var(--yellow); line-height: 1 }
+  .branding-total-value { font-size: 28px; font-weight: 900; color:var(--accent-fg); line-height: 1 }
   .branding-total-sub { font-size: 12px; color: rgba(255,255,255,.4); margin-top: 4px }
 
   /* WHY */
@@ -235,7 +235,7 @@
   /* FLOW */
   .flow-steps { display: flex; align-items: center; gap: 8px; background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 24px; overflow-x: auto }
   .flow-step-item { flex: 1; min-width: 120px; background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius-md); padding: 14px 12px; text-align: center }
-  .flow-step-item.highlight { background: #FFF8E1; border-color: var(--yellow) }
+  .flow-step-item.highlight { background: #FFF8E1; border-color:var(--accent-fg) }
   .flow-step-item.blocked { background: #FFEBEE; border-color: #FF5252 }
   .flow-step-item.success { background: #E8F5E9; border-color: #69F0AE }
   .flow-step-num { font-size: 12px; font-weight: 700; color:var(--fg-muted); margin-bottom: 4px }
@@ -327,7 +327,7 @@
 
   <!-- HERO -->
   <div class="hero">
-    <div class="hero-eyebrow">
+    <div class="hero-eyebrow" data-roles="tinta">
       <div class="hero-eyebrow-dot"></div>
       <span class="hero-eyebrow-text">Ruta Estratégica · Adcom</span>
     </div>
@@ -348,7 +348,7 @@
       <div class="hero-kpi animate-in stagger-3">
         <div class="hero-kpi-label">Proyección Digital</div>
         <div class="hero-kpi-value">656</div>
-        <div class="hero-kpi-sub"><span style="color:var(--accent-fg);font-weight:700">39,9% de cumplimiento</span><br>sobre meta total</div>
+        <div class="hero-kpi-sub"><span style="color:var(--accent);font-weight:700">39,9% de cumplimiento</span><br>sobre meta total</div>
       </div>
       <div class="hero-kpi animate-in stagger-4">
         <div class="hero-kpi-label">Leads Proyectados</div>
@@ -367,7 +367,7 @@
         <p class="section-subtitle">Diseñar un plan de medios efectivo para la campaña de matrículas 2026-2.</p>
       </div>
     </div>
-    <div class="text-block">
+    <div class="text-block" data-roles="tinta">
       Diseñar un plan de medios efectivo para la campaña de matrículas, que incluya una proyección detallada y cifras mensuales de inversión por canal, permitiendo una <strong>distribución estratégica del presupuesto</strong> para maximizar el alcance, la conversión y el cumplimiento de las metas de inscripción.
     </div>
     <div class="kpi-grid">
@@ -398,7 +398,7 @@
         <p class="section-subtitle">Distribución mensual basada en temporalidades y metas por periodo.</p>
       </div>
     </div>
-    <div class="text-block">
+    <div class="text-block" data-roles="tinta">
       La distribución del presupuesto disponible se realiza con base en la cantidad de meta que tiene cada periodo. Estos presupuestos van a realizar el <strong>impulso de las campañas</strong> que permitan generar leads potenciales, acorde a las categorías, y promover actividades y tácticas para avanzar los leads a lo largo del embudo de conversión.
     </div>
     <div class="subsection-title">Distribución mensual</div>
@@ -528,13 +528,13 @@
           <tr class="total-row"><td colspan="3">Total Técnico Laboral</td><td class="td-amount">$87.716.346</td><td class="td-pct">10,21%</td><td>3.241</td><td>$25.000</td><td>1,00%</td><td><strong>58</strong></td><td>238</td></tr>
 
           <tr class="total-row" style="background:var(--black)">
-            <td colspan="3" style="color:var(--yellow)">Gran Total 2026-2</td>
-            <td style="color:var(--yellow);font-weight:800">$859.121.900</td>
+            <td colspan="3" style="color:var(--accent)">Gran Total 2026-2</td>
+            <td style="color:var(--accent);font-weight:800">$859.121.900</td>
             <td style="color:rgba(255,255,255,.6)">100%</td>
             <td style="color:white">22.334</td>
             <td style="color:white">$25.000</td>
             <td style="color:white">2,96%</td>
-            <td style="color:var(--yellow);font-weight:800">656</td>
+            <td style="color:var(--accent);font-weight:800">656</td>
             <td style="color:rgba(255,255,255,.6)">1.645</td>
           </tr>
         </tbody>
@@ -647,7 +647,7 @@
         </div>
       </div>
     </div>
-    <div class="text-block">
+    <div class="text-block" data-roles="tinta">
       En la fase inicial, el usuario es impactado por anuncios de branding. Las <strong>herramientas de remarketing</strong> reimpactan a usuarios que mostraron interés sin completar una acción. Google Search captura a quienes buscan activamente opciones educativas. Una vez en la <strong>landing page</strong>, el formulario con <strong>fricción controlada</strong> filtra prospectos no calificados antes de capturar sus datos de contacto.
     </div>
   </section>
@@ -822,43 +822,43 @@
 
       <!-- PREGRADO -->
       <div class="angulo-card">
-        <div class="angulo-header" style="background:#0A0A0A;" data-suelo="tinta">
+        <div class="angulo-header" style="background:#0A0A0A;" data-roles="tinta">
           <div class="angulo-header-left">
             <div>
               <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
-                <span class="angulo-segment-tag" style="background:rgba(255,212,0,.15);color:var(--accent-fg);">Pregrado</span>
+                <span class="angulo-segment-tag" style="background:rgba(255,212,0,.15);color:var(--accent);">Pregrado</span>
                 <span class="angulo-concept" style="color:rgba(255,255,255,.4)">"Practica, Aprende, Conecta"</span>
               </div>
               <div class="angulo-title">El primer paso ya cuenta.</div>
             </div>
           </div>
-          <div style="font-size:var(--fs-body-min);font-weight:600;color:rgba(255,255,255,.3);text-align:right;line-height:1.5">Audiencia<br><span style="color:var(--accent-fg);font-weight:700">Aspirantes 17–25 años</span></div>
+          <div style="font-size:var(--fs-body-min);font-weight:600;color:rgba(255,255,255,.3);text-align:right;line-height:1.5">Audiencia<br><span style="color:var(--accent);font-weight:700">Aspirantes 17–25 años</span></div>
         </div>
         <div class="angulo-body">
           <div class="angulo-item">
-            <div class="angulo-num" style="color:var(--accent-fg)">01</div>
+            <div class="angulo-num" style="color:var(--accent)">01</div>
             <div class="angulo-name">El punto de partida</div>
             <div class="angulo-desc">Para quienes están comenzando. El mensaje es que empezar ya es hacer. No hay que esperar para vivir la experiencia real — empieza desde el primer día.</div>
-            <div class="angulo-copy" style="border-color:var(--accent-fg)">"Tu primera clase ya es experiencia real."</div>
+            <div class="angulo-copy" style="border-color:var(--accent)">"Tu primera clase ya es experiencia real."</div>
           </div>
           <div class="angulo-item">
-            <div class="angulo-num" style="color:var(--accent-fg)">02</div>
+            <div class="angulo-num" style="color:var(--accent)">02</div>
             <div class="angulo-name">La brecha teoría / práctica</div>
             <div class="angulo-desc">Confrontar el modelo tradicional. En UCompensar las cosas pasan, no se estudian en abstracto. El aula es el laboratorio, no el cuaderno.</div>
-            <div class="angulo-copy" style="border-color:var(--accent-fg)">"Aquí la ingeniería no se queda en el tablero."</div>
+            <div class="angulo-copy" style="border-color:var(--accent)">"Aquí la ingeniería no se queda en el tablero."</div>
           </div>
           <div class="angulo-item">
-            <div class="angulo-num" style="color:var(--accent-fg)">03</div>
+            <div class="angulo-num" style="color:var(--accent)">03</div>
             <div class="angulo-name">Empleabilidad desde el primer semestre</div>
             <div class="angulo-desc">El resultado concreto: salir con ventaja al mundo laboral porque ya practicaste. No solo un título — kilómetros reales recorridos.</div>
-            <div class="angulo-copy" style="border-color:var(--accent-fg)">"Cuando te gradúes, ya tienes kilómetros recorridos."</div>
+            <div class="angulo-copy" style="border-color:var(--accent)">"Cuando te gradúes, ya tienes kilómetros recorridos."</div>
           </div>
         </div>
       </div>
 
       <!-- POSGRADO -->
       <div class="angulo-card">
-        <div class="angulo-header" style="background:#1A0A2E;" data-suelo="tinta">
+        <div class="angulo-header" style="background:#1A0A2E;" data-roles="tinta">
           <div class="angulo-header-left">
             <div>
               <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
@@ -894,7 +894,7 @@
 
       <!-- TÉCNICO LABORAL -->
       <div class="angulo-card">
-        <div class="angulo-header" style="background:#1A0800;" data-suelo="tinta">
+        <div class="angulo-header" style="background:#1A0800;" data-roles="tinta">
           <div class="angulo-header-left">
             <div>
               <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
@@ -956,7 +956,7 @@
         </div>
         <div class="friccion-kpi">
           <div class="friccion-kpi-label">CPL estimado</div>
-          <div class="friccion-kpi-row"><div class="friccion-kpi-after" style="color:var(--accent-fg)">+30%</div></div>
+          <div class="friccion-kpi-row"><div class="friccion-kpi-after" style="color:var(--accent)">+30%</div></div>
           <div class="friccion-kpi-note">Sube el costo por lead, pero la conversión también mejora</div>
         </div>
       </div>
@@ -1000,7 +1000,7 @@
         <p class="section-subtitle">Construyendo conexiones sólidas y significativas con los estudiantes.</p>
       </div>
     </div>
-    <div class="text-block">
+    <div class="text-block" data-roles="tinta">
       En un mundo donde las opciones educativas son tan amplias como diversas, <strong>las conexiones sólidas y significativas con los estudiantes se han convertido en el pilar fundamental del éxito institucional.</strong> Más allá de ofrecer una educación de calidad, las universidades tienen la responsabilidad de ser un faro de apoyo, inspiración y pertenencia.
     </div>
     <div class="subsection-title">Presupuesto de Branding</div>
@@ -1023,7 +1023,7 @@
         <div class="branding-total-sub">5,63% del presupuesto total</div>
       </div>
     </div>
-    <div class="text-block">
+    <div class="text-block" data-roles="tinta">
       La estrategia de branding se estructura en <strong>dos grandes frentes según modalidad</strong>. Para los programas <strong>presenciales</strong>, el objetivo es el posicionamiento local en Bogotá y su área de influencia. Para los programas <strong>virtuales</strong>, la estrategia apunta a cobertura <strong>nacional</strong>, compitiendo con las principales universidades virtuales del país y posicionando a U Compensar como una opción accesible y de calidad para todo Colombia.
     </div>
     <div class="subsection-title">¿Por qué branding en esta etapa?</div>
@@ -1158,7 +1158,7 @@
     padding: 5px 14px;
     font-size: 12px;
     font-weight: 700;
-    color: var(--yellow);
+    color:var(--accent);
     white-space: nowrap
   }
   .prop-banner-title {
@@ -1167,7 +1167,7 @@
     color: var(--white);
     line-height: 1.2
   }
-  .prop-banner-title span { color: var(--yellow) }
+  .prop-banner-title span { color:var(--accent-fg) }
   .prop-banner-sub {
     font-size: 12px;
     color: rgba(255,255,255,.45);
@@ -1497,7 +1497,7 @@
     </div>
   </div>
 
-  <div class="text-block">
+  <div class="text-block" data-roles="tinta">
     Aumentar el conocimiento del programa entre jóvenes cundinamarqueses, favorecer la participación activa de aspirantes en municipios del departamento, y resaltar los beneficios económicos y sociales: <strong>financiación parcial o total de matrícula y subsidios para gastos de sostenimiento</strong>, vinculados a carreras acordes con las necesidades productivas de Cundinamarca. Posicionar a <strong>U.Compensar</strong> como la institución aliada del Fondo de la Gobernación.
   </div>
 
@@ -1551,39 +1551,39 @@
 
     <!-- EJE 01 -->
     <div class="prop-eje-card">
-      <div class="prop-eje-header" style="background:#111" data-suelo="tinta">
+      <div class="prop-eje-header" style="background:#111" data-roles="tinta">
         <div class="prop-eje-header-left">
           <div class="prop-eje-num">01</div>
           <div class="prop-eje-meta">
             <div>
-              <span class="prop-eje-segment-tag" style="background:rgba(255,212,0,.15);color:var(--accent-fg);">Identidad Regional</span>
+              <span class="prop-eje-segment-tag" style="background:rgba(255,212,0,.15);color:var(--accent);">Identidad Regional</span>
               <span class="prop-eje-concept">"De Cundinamarca al mundo, sin perder tus raíces"</span>
             </div>
             <div class="prop-eje-name">De Cundinamarca al mundo, sin perder tus raíces</div>
             <div class="prop-eje-desc">Ser profesional no significa abandonar tu región. Bogotá está cerca, y U.Compensar es el puente. El mensaje no es "quédate", sino "sal, crece y vuelve con más": estudiar en la capital es accesible, el programa lo financia, y el retorno al municipio es el propósito.</div>
           </div>
         </div>
-        <div class="prop-eje-tono">Tono<br><span style="color:var(--accent-fg)">Pertenencia</span><span style="color:var(--accent-fg)"> · Orgullo regional</span><br><span style="color:var(--accent-fg)">Proyección personal</span></div>
+        <div class="prop-eje-tono">Tono<br><span style="color:var(--accent)">Pertenencia</span><span style="color:var(--accent)"> · Orgullo regional</span><br><span style="color:var(--accent)">Proyección personal</span></div>
       </div>
 
       <div class="prop-eje-body">
         <div class="prop-eje-item">
-          <div class="prop-eje-item-num" style="color:var(--accent-fg)">A</div>
+          <div class="prop-eje-item-num" style="color:var(--accent)">A</div>
           <div class="prop-eje-item-title">Bogotá está más cerca de lo que crees</div>
           <div class="prop-eje-item-text">Desmonta la barrera psicológica de la distancia. Estudiar en Bogotá no implica abandonar la familia ni el municipio. U.Compensar está en la capital y el programa lo pone al alcance.</div>
-          <div class="prop-eje-item-copy" style="border-color:var(--accent-fg)">"Bogotá está a la vuelta. Tu carrera, también."</div>
+          <div class="prop-eje-item-copy" style="border-color:var(--accent)">"Bogotá está a la vuelta. Tu carrera, también."</div>
         </div>
         <div class="prop-eje-item">
-          <div class="prop-eje-item-num" style="color:var(--accent-fg)">B</div>
+          <div class="prop-eje-item-num" style="color:var(--accent)">B</div>
           <div class="prop-eje-item-title">Cundinamarca te necesita de vuelta, profesional</div>
           <div class="prop-eje-item-text">No es solo un beneficio individual: es una inversión de la Gobernación en el talento regional. El joven tiene un compromiso implícito con su departamento. Ese sentido de propósito y pertenencia es motivación real.</div>
-          <div class="prop-eje-item-copy" style="border-color:var(--accent-fg)">"La Gobernación invierte en ti. Cundinamarca espera lo mejor de ti."</div>
+          <div class="prop-eje-item-copy" style="border-color:var(--accent)">"La Gobernación invierte en ti. Cundinamarca espera lo mejor de ti."</div>
         </div>
         <div class="prop-eje-item">
-          <div class="prop-eje-item-num" style="color:var(--accent-fg)">C</div>
+          <div class="prop-eje-item-num" style="color:var(--accent)">C</div>
           <div class="prop-eje-item-title">Sales a aprender, vuelves a transformar</div>
           <div class="prop-eje-item-text">Alineado con "Hacer Para Saber". El aprendizaje práctico en Bogotá tiene un destino claro: aplicar ese conocimiento en las necesidades reales del departamento. El viaje formativo prepara al joven para impactar su región.</div>
-          <div class="prop-eje-item-copy" style="border-color:var(--accent-fg)">"Estudia en Bogotá. Aplica en Cundinamarca. Transforma tu región."</div>
+          <div class="prop-eje-item-copy" style="border-color:var(--accent)">"Estudia en Bogotá. Aplica en Cundinamarca. Transforma tu región."</div>
         </div>
       </div>
 
@@ -1596,7 +1596,7 @@
 
     <!-- EJE 02 -->
     <div class="prop-eje-card">
-      <div class="prop-eje-header" style="background:#111" data-suelo="tinta">
+      <div class="prop-eje-header" style="background:#111" data-roles="tinta">
         <div class="prop-eje-header-left">
           <div class="prop-eje-num">02</div>
           <div class="prop-eje-meta">
@@ -1920,13 +1920,13 @@
   .b2b-hero { background: var(--black); padding: 72px 40px 56px; border-bottom: 1px solid var(--gray-200); position: relative; overflow: hidden }
   .b2b-hero::before { content: ''; position: absolute; top: -60px; right: -60px; width: 320px; height: 320px; background: var(--yellow); border-radius: 50%; opacity: .05 }
   .b2b-hero-tag { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,212,0,.15); border: 1px solid rgba(255,212,0,.3); border-radius: var(--radius); padding: 5px 14px; margin-bottom: 20px }
-  .b2b-hero-tag span { font-size: 12px; font-weight: 700; color: var(--yellow) }
+  .b2b-hero-tag span { font-size: 12px; font-weight: 700; color:var(--accent-fg) }
   .b2b-hero-title { font-size: 52px; font-weight: 900; color: var(--white); line-height: 1.05; letter-spacing: -.02em; margin-bottom: 8px }
-  .b2b-hero-title em { color: var(--yellow); font-style: normal }
+  .b2b-hero-title em { color:var(--accent-fg); font-style: normal }
   .b2b-hero-sub { font-size: 15px; color: rgba(255,255,255,.45); margin-bottom: 40px }
   .b2b-hero-chips { display: flex; gap: 10px; flex-wrap: wrap }
   .b2b-chip { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12); border-radius: var(--radius); padding: 7px 16px; font-size: 12px; font-weight: 500; color: rgba(255,255,255,.7) }
-  .b2b-chip.yellow { background: var(--yellow); color: var(--black); border-color: var(--yellow); font-weight: 700 }
+  .b2b-chip.yellow { background: var(--yellow); color: var(--black); border-color:var(--accent-fg); font-weight: 700 }
 
   /* B2B TABLES */
   .b2b-table-wrap { overflow-x: auto; margin-top: 24px; border-radius: var(--radius-md); border: 1px solid var(--gray-200) }
@@ -1964,13 +1964,13 @@
   .persona-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 24px }
   .persona-card { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 28px }
   .persona-card-header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px }
-  .persona-avatar { width: 48px; height: 48px; background: var(--black); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; color: var(--yellow); flex-shrink: 0 }
+  .persona-avatar { width: 48px; height: 48px; background: var(--black); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; color:var(--accent-fg); flex-shrink: 0 }
   .persona-name { font-size: 15px; font-weight: 700; color: var(--black) }
   .persona-role { font-size: 12px; color:var(--fg-muted)}
   .persona-row { display: flex; gap: 10px; margin-bottom: 10px }
   .persona-row-label { font-size: 12px; font-weight: 700; color:var(--fg-muted); min-width: 80px; padding-top: 2px }
   .persona-row-value { font-size: 13px; color: var(--gray-600); line-height: 1.5; flex: 1 }
-  .persona-insight { background: var(--black); border-radius: var(--radius-sm); padding: 14px 16px; margin-top: 16px; font-size: 13px; color: var(--yellow); font-style: italic; font-weight: 500; line-height: 1.5 }
+  .persona-insight { background: var(--black); border-radius: var(--radius-sm); padding: 14px 16px; margin-top: 16px; font-size: 13px; color:var(--accent); font-style: italic; font-weight: 500; line-height: 1.5 }
 
   /* EJE CARDS */
   .eje-sombrilla { background: var(--black); border-radius: var(--radius-lg); padding: 32px; margin-bottom: 24px }
@@ -2007,7 +2007,7 @@
   .postlead-grid { display: flex; flex-direction: column; gap: 12px; margin-top: 24px }
   .postlead-step { display: flex; align-items: flex-start; gap: 16px; background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-md); padding: 18px 20px; transition: transform .15s, box-shadow .15s }
   .postlead-step:hover { transform: translateX(4px); box-shadow: none }
-  .postlead-step-num { width: 32px; height: 32px; background: var(--black); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--yellow); flex-shrink: 0 }
+  .postlead-step-num { width: 32px; height: 32px; background: var(--black); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color:var(--accent-fg); flex-shrink: 0 }
   .postlead-step-body { flex: 1 }
   .postlead-step-title { font-size: 14px; font-weight: 700; color: var(--black); margin-bottom: 3px }
   .postlead-step-desc { font-size: 13px; color: var(--gray-600); line-height: 1.5 }
@@ -2021,7 +2021,7 @@
   .canal-card-role { font-size:var(--fs-body-min); color:var(--fg-muted); font-style: italic; margin-bottom: 16px; border-bottom: 1px solid var(--gray-100); padding-bottom: 12px }
   .canal-card-list { display: flex; flex-direction: column; gap: 7px }
   .canal-item { display: flex; gap: 8px; font-size:var(--fs-body-min); color: var(--gray-600); line-height: 1.4 }
-  .canal-item::before { content: '→'; color: var(--yellow); font-weight: 700; flex-shrink: 0 }
+  .canal-item::before { content: '→'; color:var(--accent-fg); font-weight: 700; flex-shrink: 0 }
 
   /* SEGMENT TABLE */
   .seg-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px }
@@ -2074,7 +2074,7 @@
 
 <!-- B2B DIVIDER HERO -->
 <div class="b2b-hero section" id="b2b-hero-divider">
-  <div class="b2b-hero-tag"><span>Nueva sección</span></div>
+  <div class="b2b-hero-tag" data-roles="tinta"><span>Nueva sección</span></div>
   <div class="b2b-hero-title">Ruta Estratégica <em>B2B</em></div>
   <div class="b2b-hero-sub">Soluciones Empresariales · Julio–Diciembre 2026 · $500.000.000 COP</div>
   <div class="b2b-hero-chips">
@@ -2114,7 +2114,7 @@
     </div>
   </div>
 
-  <div class="text-block" style="margin-top:24px;">
+  <div class="text-block" style="margin-top:24px;" data-roles="tinta">
     La estrategia opera en <strong>dos frentes simultáneos</strong>: <strong>generación de leads calificados</strong> para los productos de conversión (Propulsor C-Level, Propulsor Empresas y Escala Empresarial) y <strong>construcción de marca y posicionamiento</strong> para los productos de branding (Educación Continua B2B, Laboratorio de Innovación y POSIBLE). Un flujo de contacto estructurado post-lead garantiza que ningún prospecto captado se pierda sin atención en las primeras 2 horas.
   </div>
 
@@ -2168,7 +2168,7 @@
     </div>
   </div>
 
-  <div class="text-block">
+  <div class="text-block" data-roles="tinta">
     <em>"Usar marketing sin estructura es tirar el dinero a la basura. El objetivo es profesionalizar y dar dirección a todas las áreas que componen el crecimiento de la marca." — Marketing Estructural®</em>
   </div>
 
@@ -2551,11 +2551,11 @@
 
   <div class="kpi-grid" style="margin-bottom:24px;">
     <div class="kpi-card"><div class="kpi-card-label">Julio 12%</div><div class="kpi-card-value">$62M</div><div class="kpi-card-sub">Arranque moderado. Prospección suave y construcción de audiencias.</div></div>
-    <div class="kpi-card" style="border-color:var(--yellow);"><div class="kpi-card-label">🔥 Agosto 22%</div><div class="kpi-card-value yellow">$108M</div><div class="kpi-card-sub">PICO 1. Regreso total de operaciones. Mayor receptividad a propuestas.</div></div>
+    <div class="kpi-card" style="border-color:var(--accent);"><div class="kpi-card-label">🔥 Agosto 22%</div><div class="kpi-card-value yellow">$108M</div><div class="kpi-card-sub">PICO 1. Regreso total de operaciones. Mayor receptividad a propuestas.</div></div>
     <div class="kpi-card"><div class="kpi-card-label">Septiembre 18%</div><div class="kpi-card-value">$88M</div><div class="kpi-card-sub">Sostenimiento alto. Foco en cierre de leads calientes de agosto.</div></div>
   </div>
   <div class="kpi-grid" style="margin-bottom:32px;">
-    <div class="kpi-card" style="border-color:var(--yellow);"><div class="kpi-card-label">🔥 Octubre 22%</div><div class="kpi-card-value yellow">$108M</div><div class="kpi-card-sub">PICO 2. Cierre de presupuestos para 2027. Mayor urgencia del año.</div></div>
+    <div class="kpi-card" style="border-color:var(--accent);"><div class="kpi-card-label">🔥 Octubre 22%</div><div class="kpi-card-value yellow">$108M</div><div class="kpi-card-sub">PICO 2. Cierre de presupuestos para 2027. Mayor urgencia del año.</div></div>
     <div class="kpi-card"><div class="kpi-card-label">Noviembre 16%</div><div class="kpi-card-value">$81M</div><div class="kpi-card-sub">Cierre fuerte. Nurturing de leads que no cerraron en octubre.</div></div>
     <div class="kpi-card"><div class="kpi-card-label">Diciembre 10%</div><div class="kpi-card-value">$51M</div><div class="kpi-card-sub">Desaceleración. Mantenimiento y branding institucional.</div></div>
   </div>
@@ -2585,7 +2585,7 @@
       </tbody>
     </table>
   </div>
-  <div class="text-block" style="margin-top:16px;font-size:var(--fs-body-min);">Los picos de agosto y octubre concentran el <strong>44% de la inversión total</strong>, alineados con los momentos de mayor toma de decisiones en empresas colombianas. Valores redondeados al millón más cercano por canal.</div>
+  <div class="text-block" style="margin-top:16px;font-size:var(--fs-body-min);" data-roles="tinta">Los picos de agosto y octubre concentran el <strong>44% de la inversión total</strong>, alineados con los momentos de mayor toma de decisiones en empresas colombianas. Valores redondeados al millón más cercano por canal.</div>
 </section>
 
 <!-- 09 FLUJO POST-LEAD -->
@@ -2674,8 +2674,8 @@
     </div>
   </div>
 
-  <div class="text-block" style="margin-top:24px;background:var(--black);border-color:transparent;color:rgba(255,255,255,.7);">
-    <strong style="color:var(--yellow);">Notas críticas del flujo:</strong><br><br>
+  <div class="text-block" style="margin-top:24px;background:var(--black);border-color:transparent;color:rgba(255,255,255,.7);" data-roles="tinta">
+    <strong style="color:var(--accent);">Notas críticas del flujo:</strong><br><br>
     El primer contacto debe ser siempre por <strong style="color:var(--white);">WhatsApp en los primeros 10 minutos</strong> — es el factor con mayor impacto en la tasa de conversión B2B. El asesor debe conocer el producto específico por el que llegó el lead. El CRM debe tener tags por producto, canal de origen y etapa del flujo para medir la efectividad de cada paso.
   </div>
 
