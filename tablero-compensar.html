@@ -145,6 +145,27 @@ tr.modal-row td:first-child{padding-left:28px;color:#666}
 .loader-sub{font-size:12px;color:var(--fg-muted)}
 .spinner{width:32px;height:32px;border:3px solid #222;border-top-color:var(--accent-fg);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
+/* IMPRESIÓN / PDF — el shell (.app-sidebar, tokens) ya lo cubre assets/css/adcom.css.
+   Estas reglas son las propias del dashboard: sin ellas las tablas anchas (hasta 13
+   columnas) y el grid de 3 gráficas se salen del ancho de página y quedan cortadas,
+   y las cards se parten a la mitad en el salto de página. */
+@media print{
+  @page{ size:A4 landscape; margin:10mm 8mm }
+  .topbar-filters,.prog-controls,.loading-bar,#loader,.btn-refresh,.last-update{display:none !important}
+  .content{padding:0 !important}
+  .section{opacity:1 !important;transform:none !important;margin-bottom:18px}
+  .kpi-grid,.medio-grid{grid-template-columns:repeat(2,1fr) !important}
+  .trend-grid{grid-template-columns:1fr !important}
+  .chart-wrap{height:130px !important}
+  .kpi-card,.medio-card,.chart-card{break-inside:avoid;page-break-inside:avoid}
+  .prog-section-title{break-after:avoid;page-break-after:avoid}
+  .table-scroll{overflow:visible !important}
+  table{font-size:7.5px !important}
+  th,td{padding:2px 4px !important}
+  th{white-space:normal !important}
+  tr{break-inside:avoid;page-break-inside:avoid}
+  thead{display:table-header-group}
+}
 </style>
 </head>
 <body class="con-shell">
@@ -271,6 +292,10 @@ tr.modal-row td:first-child{padding-left:28px;color:#666}
       <div class="table-wrap">
         <div class="table-header"><div class="table-title">Inversión mensual por canal y nivel</div></div>
         <div class="table-scroll" id="mes-table"></div>
+      </div>
+      <div class="table-wrap" style="margin-top:16px">
+        <div class="table-header"><div class="table-title">Inversión, Leads y CPL mensual — Ene 2026 a hoy</div></div>
+        <div class="table-scroll" id="mes-leads-cpl-table"></div>
       </div>
     </div>
 
@@ -570,6 +595,7 @@ function processAndRender(){
   const meses=Object.keys(mesNivelMap).sort();
   $('period-tag').textContent='📅 '+(fDesde||meses[0]||'')+' → '+(fHasta||meses[meses.length-1]||'hoy');
   renderMesTable();
+  renderMesLeadsCplTable();
   renderAllProgTables();
   revealSections()
 }
@@ -769,6 +795,89 @@ function toggleMes(mes){
   rows.forEach(r=>r.classList.toggle('hidden',open))
 }
 
+// ── INVERSIÓN / LEADS / CPL MENSUAL — FIJO ENE 2026 A HOY ─────────────────────
+// Ignora el filtro de fecha del topbar a propósito: este resumen siempre debe
+// mostrar el histórico completo del período vigente, sin importar qué rango
+// haya quedado seleccionado arriba. Sí respeta canal/nivel/modalidad.
+function renderMesLeadsCplTable(){
+  const fCanal=$('f-canal')?.value||'';
+  const fNivel=$('f-nivel')?.value||'';
+  const fModal=$('f-modalidad')?.value||'';
+  const hoy=new Date();
+  const desdeStr='2026-01-01';
+  const hastaStr=hoy.getFullYear()+'-'+String(hoy.getMonth()+1).padStart(2,'0')+'-'+String(hoy.getDate()).padStart(2,'0');
+
+  const rows=(RAW_RG||[]).map(r=>{
+    const f=parseFecha(r[0]);
+    return {
+      fecha:f.full, mes:f.mes, date:f.date,
+      canal:String(r[4]||'').trim(),
+      nivel:String(r[8]||'').trim(),
+      modal:String(r[9]||'').trim(),
+      tipoPauta:String(r[14]||'').trim().toUpperCase(),
+      inv:parseInv(r[2]),
+      leadsP:parseLeads(r[3]),
+      leadsCRM:parseLeads(r[11]),
+    }
+  }).filter(r=>r.date && r.fecha>=desdeStr && r.fecha<=hastaStr)
+    .filter(r=>{
+      if(fCanal && r.canal!==fCanal) return false;
+      if(fNivel){
+        if(fNivel==='SOL_EMP'){ if(r.tipoPauta!=='B2B') return false }
+        else if(r.nivel!==fNivel) return false
+      }
+      if(fModal && r.modal!==fModal) return false;
+      return true
+    });
+
+  const byMes={};
+  rows.forEach(r=>{
+    if(!byMes[r.mes]) byMes[r.mes]={inv:0,leadsP:0,leadsCRM:0};
+    byMes[r.mes].inv+=r.inv;
+    byMes[r.mes].leadsP+=r.leadsP;
+    byMes[r.mes].leadsCRM+=r.leadsCRM
+  });
+  const meses=Object.keys(byMes).filter(Boolean).sort();
+  if(!meses.length){
+    $('mes-leads-cpl-table').innerHTML='<div style="padding:24px;text-align:center;color:#aaa">Sin datos</div>';
+    return
+  }
+
+  let tInv=0,tLP=0,tLC=0;
+  const body=meses.map(mes=>{
+    const d=byMes[mes];
+    tInv+=d.inv; tLP+=d.leadsP; tLC+=d.leadsCRM;
+    const cplP=d.leadsP?d.inv/d.leadsP:0;
+    const cplC=d.leadsCRM?d.inv/d.leadsCRM:0;
+    return `<tr>
+      <td>${fmtMes(mes)}</td>
+      <td class="num bold">${fmtCOP(d.inv)}</td>
+      <td class="num">${fmtNz(d.leadsP)}</td>
+      <td class="num" style="color:var(--accent-fg);font-weight:700">${fmtCOP(cplP)}</td>
+      <td class="num bold">${fmtNz(d.leadsCRM)}</td>
+      <td class="num" style="color:var(--accent-fg);font-weight:700">${fmtCOP(cplC)}</td>
+    </tr>`
+  }).join('');
+  const totRow=`<tr class="total-row">
+    <td>TOTAL</td>
+    <td class="num yellow">${fmtCOP(tInv)}</td>
+    <td class="num yellow">${fmtNz(tLP)}</td>
+    <td class="num yellow">${fmtCOP(tLP?tInv/tLP:0)}</td>
+    <td class="num yellow">${fmtNz(tLC)}</td>
+    <td class="num yellow">${fmtCOP(tLC?tInv/tLC:0)}</td>
+  </tr>`;
+  $('mes-leads-cpl-table').innerHTML=`<table>
+    <thead><tr>
+      <th>Mes</th>
+      <th class="num">Inversión</th>
+      <th class="num">Leads Plataforma</th>
+      <th class="num">CPL Plataforma</th>
+      <th class="num">Leads CRM</th>
+      <th class="num">CPL CRM</th>
+    </tr></thead>
+    <tbody>${body}${totRow}</tbody></table>`
+}
+
 // ── TABLAS POR PROGRAMA ───────────────────────────────────────────────────────
 const progSort={
   Pregrado:{col:'inv_total',dir:-1},
@@ -912,6 +1021,15 @@ window.addEventListener('DOMContentLoaded',()=>{
   $('f-desde').value=h.getFullYear()+'-01-01';
   $('f-hasta').value=h.getFullYear()+'-'+String(h.getMonth()+1).padStart(2,'0')+'-'+String(h.getDate()).padStart(2,'0');
   refreshData()
+});
+// Las gráficas (Chart.js) se dibujan al tamaño de pantalla; al imprimir el
+// trend-grid pasa a 1 columna y sin este resize() quedan con el ancho viejo,
+// cortadas por el borde de la página impresa.
+window.addEventListener('beforeprint',()=>{
+  [chartInv,chartLeads,chartCpl].forEach(c=>c&&c.resize())
+});
+window.addEventListener('afterprint',()=>{
+  [chartInv,chartLeads,chartCpl].forEach(c=>c&&c.resize())
 });
 </script>
 </body>
