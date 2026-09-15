@@ -98,27 +98,56 @@ body{font-family:'Poppins',sans-serif;background:var(--gray-50);color:var(--blac
 .table-header{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--gray-100)}
 .table-title{font-size:13px;font-weight:700}
 .table-scroll{overflow-x:auto}
-table{width:100%;border-collapse:collapse}
-thead tr{background:var(--gray-50);border-bottom:2px solid var(--gray-200)}
-th{padding:9px 12px;text-align:left;font-size:12px;font-weight:700;color:var(--fg-muted);white-space:nowrap}
-th.num{text-align:right}
-th.sortable{cursor:pointer;user-select:none}
-th.sortable:hover{color:var(--black)}
-th.sort-active{color:var(--black)!important}
-td{padding:8px 12px;border-bottom:1px solid var(--gray-100);font-size:12px}
-td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:500;white-space:nowrap}
-td.bold{font-weight:700}
-tr:hover td{background:#FAFAFA}
-tr.total-row td{background:var(--black);color:var(--white);font-weight:700;border-bottom:none;font-size:12px}
-tr.total-row td.yellow{color:var(--accent-fg)}
-tr.mes-row{background:var(--gray-50);cursor:pointer}
-tr.mes-row td{font-weight:700;font-size:12px;border-bottom:2px solid var(--gray-200)}
-tr.mes-row:hover td{background:#ECECEC}
+/* Todo lo de tabla va prefijado con .table-scroll: assets/css/adcom.css trae un
+   componente "tabla" propio con selectores sin clase (table, thead th+th,
+   tbody td{text-align:right;...}) pensado para su propio patrón (th = rótulo
+   de fila, td = dato). Sin el prefijo, esas reglas -por tener más elementos en
+   el selector- ganan la especificidad sobre las de acá y todas las tablas del
+   dashboard terminan con la primera columna alineada a la derecha y un
+   min-width:620px de fábrica, aunque el HTML de este archivo no siga ese
+   patrón (usa <td> también para el rótulo de fila). */
+.table-scroll table{width:100%;border-collapse:collapse}
+.table-scroll thead tr{background:var(--gray-50);border-bottom:2px solid var(--gray-200)}
+.table-scroll th{padding:9px 12px;text-align:left;font-size:12px;font-weight:700;color:var(--fg-muted);white-space:nowrap}
+.table-scroll th.num{text-align:right}
+.table-scroll th.sortable{cursor:pointer;user-select:none}
+.table-scroll th.sortable:hover{color:var(--black)}
+.table-scroll th.sort-active{color:var(--black)!important}
+.table-scroll td{padding:8px 12px;border-bottom:1px solid var(--gray-100);font-size:12px;text-align:left}
+.table-scroll td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:500;white-space:nowrap}
+.table-scroll td.bold{font-weight:700}
+.prog-name{min-width:160px;max-width:220px;font-weight:600;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.table-scroll tr:hover td{background:#FAFAFA}
+.table-scroll tr.total-row td{background:var(--black);color:var(--white);font-weight:700;border-bottom:none;font-size:12px}
+.table-scroll tr.total-row td.yellow{color:var(--accent-fg)}
+.table-scroll tr.mes-row{background:var(--gray-50);cursor:pointer}
+.table-scroll tr.mes-row td{font-weight:700;font-size:12px;border-bottom:2px solid var(--gray-200)}
+.table-scroll tr.mes-row:hover td{background:#ECECEC}
 .toggle-icon{display:inline-block;transition:transform .2s;margin-right:6px;color:#aaa}
 .toggle-icon.open{transform:rotate(90deg)}
-tr.modal-row td{background:#FAFAFA;font-size:12px}
-tr.modal-row.hidden{display:none}
-tr.modal-row td:first-child{padding-left:28px;color:#666}
+.table-scroll tr.modal-row td{background:#FAFAFA;font-size:12px}
+.table-scroll tr.modal-row.hidden{display:none}
+.table-scroll tr.modal-row td:first-child{padding-left:28px;color:#666}
+/* RESPONSIVE TABLAS: la tabla de programas llega a 13 columnas (FB/GO/TT/LI +
+   Leads/CPL plataforma y CRM + meta). A 12px de fuente y el relleno normal
+   eso solo cabe entero en pantallas muy anchas (>=1600px); por debajo, antes
+   de esto, se recortaba contra el borde de la card en vez de reflowar. Se
+   reduce tipografía/relleno en cascada para que quepa sin scroll horizontal
+   en resoluciones de laptop típicas (1366-1440), dejando el scroll de
+   .table-scroll como último recurso en pantallas angostas/tablet. */
+@media(max-width:1700px){
+  .table-scroll th,.table-scroll td{font-size:11px;padding:7px 9px}
+  .prog-name{min-width:130px;max-width:180px}
+}
+@media(max-width:1450px){
+  .table-scroll th,.table-scroll td{font-size:10px;padding:6px 7px}
+  .prog-name{min-width:110px;max-width:150px}
+}
+@media(max-width:1300px){
+  .table-scroll th,.table-scroll td{font-size:9px;padding:4px 6px}
+  .table-scroll th{white-space:normal}
+  .prog-name{min-width:100px;max-width:130px}
+}
 /* PROGRAMAS */
 .prog-section{margin-bottom:28px}
 .prog-section-title{font-size:12px;font-weight:800;padding:10px 16px;border-radius:var(--r-sm) var(--r-sm) 0 0;color:var(--fg);display:flex;align-items:center;gap:8px}
@@ -160,9 +189,9 @@ tr.modal-row td:first-child{padding-left:28px;color:#666}
   .kpi-card,.medio-card,.chart-card{break-inside:avoid;page-break-inside:avoid}
   .prog-section-title{break-after:avoid;page-break-after:avoid}
   .table-scroll{overflow:visible !important}
-  table{font-size:7.5px !important}
-  th,td{padding:2px 4px !important}
-  th{white-space:normal !important}
+  .table-scroll th,.table-scroll td{font-size:7.5px !important;padding:2px 4px !important}
+  .table-scroll th{white-space:normal !important}
+  .prog-name{min-width:0 !important;max-width:140px !important}
   tr{break-inside:avoid;page-break-inside:avoid}
   thead{display:table-header-group}
 }
@@ -951,7 +980,7 @@ function renderAllProgTables(){
     const tbody=rows.map(p=>{
       const invCanales=canalesVisibles.map(c=>`<td class="num" style="${canalCfg[c].style}">${fmtCOP(p['inv_'+c])}</td>`).join('');
       const base=`
-        <td style="min-width:160px;font-weight:600;max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${p.Programa}">${p.Programa}</td>
+        <td class="prog-name" title="${p.Programa}">${p.Programa}</td>
         <td>${badge(p.Modal)}</td>
         <td class="num bold">${fmtCOP(p.inv_total)}</td>
         ${invCanales}`;
