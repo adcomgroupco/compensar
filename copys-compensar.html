@@ -87,13 +87,15 @@ body{font-family:'Poppins',sans-serif;background:var(--bg);min-height:100vh;colo
 .sbdg-r{background:var(--no-bg);color:var(--no);border:1px solid var(--no-brd)}
 
 /* COPY BOXES */
-.meta-g{display:grid;grid-template-columns:1fr 285px;gap:10px}
+.meta-g{display:grid;grid-template-columns:1fr;gap:10px}
+.meta-sub{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
 .goog-g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .cbox{border-radius:var(--radius-sm);padding:12px 13px}
 .bm{background:var(--meta-bg);border:1px solid var(--meta-brd)}
 .bg{background:var(--google-bg);border:1px solid var(--google-brd)}
 .bt{background:var(--tiktok-bg);border:1px solid var(--tiktok-brd);max-width:460px}
-.bb{background:var(--beca-bg);border:1px solid var(--beca-brd);max-width:460px}
+.bb{background:var(--beca-bg);border:1px solid var(--beca-brd)}
+.bl{background:#F1EEFB;border:1px solid #D9D2F5}
 .ctag{font-size:12px;font-weight:700;color:var(--t3);display:block;margin-bottom:6px}
 .ctxt{font-size:12.5px;color:var(--t2);line-height:1.65}
 .cchars{font-size:12px;color:var(--t3);text-align:right;margin-top:6px}
@@ -130,7 +132,7 @@ body{font-family:'Poppins',sans-serif;background:var(--bg);min-height:100vh;colo
 .ybar{height:4px;background:var(--yellow);margin:20px -40px 0;border-radius:0 0 var(--radius) var(--radius)}
 
 @media(max-width:760px){
-  .meta-g,.goog-g{grid-template-columns:1fr}
+  .meta-g,.goog-g,.meta-sub{grid-template-columns:1fr}
   .fbar{padding:10px 14px;gap:10px}
   .hdr{padding:0 14px}
   .main{padding:14px 10px 60px}
@@ -189,7 +191,6 @@ body{font-family:'Poppins',sans-serif;background:var(--bg);min-height:100vh;colo
     <button class="fb" onclick="setF('medio','meta',this,'am')">Meta</button>
     <button class="fb" onclick="setF('medio','google',this,'ag')">Google</button>
     <button class="fb" onclick="setF('medio','tiktok',this,'atk')">TikTok</button>
-    <button class="fb" onclick="setF('medio','beca',this,'ab')">Beca</button>
   </div>
   <div class="sep"></div>
   <div class="fgrp">
@@ -216,8 +217,8 @@ body{font-family:'Poppins',sans-serif;background:var(--bg);min-height:100vh;colo
 <script>
 // ─── CONFIG ───────────────────────────────────────────────────
 const SURL = 'https://script.google.com/macros/s/AKfycbzQOGqL3JKujSK7f2jxbMXUQ4iIHJ3-w8KE8GTPGQukrMIbSESnjTrhqwnDX3TdMtEE/exec';
-const MEDIOS = ['meta','google','tiktok','beca'];
-const ML = {meta:'Meta',google:'Google',tiktok:'TikTok',beca:'Beca'};
+const MEDIOS = ['meta','google','tiktok'];
+const ML = {meta:'Meta',google:'Google',tiktok:'TikTok'};
 const NL = {'Técnico laboral':'tec','Pregrado':'pre','Posgrado':'pos'};
 const NB = {'Técnico laboral':'TÉCNICO LABORAL','Pregrado':'PREGRADO','Posgrado':'POSGRADO'};
 
@@ -251,8 +252,9 @@ async function loadData() {
       nivel:            row['Nivel']        || '',
       programa:         row['Programa']     || '',
       modalidad:        row['Modalidad']    || '',
-      meta_primary:     row['META \u2014 Primary Text (out-of-ad)'] || row['META — Primary Text (out-of-ad)'] || '',
-      meta_creative:    row['META \u2014 Creative Ad (in-image, 60-100 chars)'] || row['META — Creative Ad (in-image, 60-100 chars)'] || '',
+      meta_primary:     row['META \u2014 Primary Text (out-of-ad)'] || row['META — Primary Text (out-of-ad)'] || row['META \u2014 Copy (out-of-ad)'] || row['META — Copy (out-of-ad)'] || '',
+      meta_creative:    row['META \u2014 Creative Ad (in-image, 60-100 chars)'] || row['META — Creative Ad (in-image, 60-100 chars)'] || row['META \u2014 Copy Pieza (in-image)'] || row['META — Copy Pieza (in-image)'] || '',
+      meta_labels:      row['META \u2014 Labels (Programa | Modalidad | Duraci\u00f3n)'] || row['META — Labels (Programa | Modalidad | Duración)'] || row['LABELS'] || '',
       google_headlines: [
         row['GOOGLE H1']||'', row['GOOGLE H2']||'', row['GOOGLE H3']||'',
         row['GOOGLE H4']||'', row['GOOGLE H5']||'', row['GOOGLE H6']||'',
@@ -268,7 +270,7 @@ async function loadData() {
       beca: row['BECA'] || ''
     }));
 
-    TOTAL = DATA.length * 4;
+    TOTAL = DATA.length * 3;
 
     // init state
     DATA.forEach((_, i) => {
@@ -323,8 +325,12 @@ function buildCards() {
         const pc = p.meta_creative.length;
         const ok = pc >= 60 && pc <= 100 ? '✅' : '⚠️';
         cnt = `<div class="meta-g">
-          <div class="cbox bm"><span class="ctag">Primary Text — out-of-ad</span><p class="ctxt">${esc(p.meta_primary)}</p><div class="cchars">${p.meta_primary.length} chars</div></div>
-          <div class="cbox bm"><span class="ctag">Creative Ad — in-image (60-100 chars)</span><p class="ctxt">${esc(p.meta_creative)}</p><div class="cchars">${pc} chars ${ok}</div></div>
+          <div class="cbox bm"><span class="ctag">Copy — out-of-ad</span><p class="ctxt">${esc(p.meta_primary)}</p><div class="cchars">${p.meta_primary.length} chars</div></div>
+          <div class="meta-sub">
+            <div class="cbox bm"><span class="ctag">Copy Pieza — in-image (60-100 chars)</span><p class="ctxt">${esc(p.meta_creative)}</p><div class="cchars">${pc} chars ${ok}</div></div>
+            <div class="cbox bl"><span class="ctag">Labels — Programa | Modalidad | Duración</span><p class="ctxt">${esc(p.meta_labels)}</p></div>
+            <div class="cbox bb"><span class="ctag">Beca — mensaje del beneficio</span><p class="ctxt">${esc(p.beca)}</p></div>
+          </div>
         </div>`
       } else if (m === 'google') {
         const chips = p.google_headlines.map(h => `<span class="hl">${esc(h)}</span>`).join('');
@@ -337,8 +343,6 @@ function buildCards() {
         const tc  = p.tiktok.length;
         const tok = tc <= 100 ? '✅' : '⚠️';
         cnt = `<div class="cbox bt"><span class="ctag">Caption — máx 100 chars, sin emojis</span><p class="ctxt">${esc(p.tiktok)}</p><div class="cchars">${tc} chars ${tok}</div></div>`;
-      } else {
-        cnt = `<div class="cbox bb"><span class="ctag">Beca — mensaje del beneficio</span><p class="ctxt">${esc(p.beca)}</p></div>`;
       }
 
       secs += `<div class="msec" id="s-${i}-${m}">
