@@ -252,9 +252,9 @@ async function loadData() {
       nivel:            row['Nivel']        || '',
       programa:         row['Programa']     || '',
       modalidad:        row['Modalidad']    || '',
-      meta_primary:     row['META \u2014 Primary Text (out-of-ad)'] || row['META — Primary Text (out-of-ad)'] || row['META \u2014 Copy (out-of-ad)'] || row['META — Copy (out-of-ad)'] || '',
-      meta_creative:    row['META \u2014 Creative Ad (in-image, 60-100 chars)'] || row['META — Creative Ad (in-image, 60-100 chars)'] || row['META \u2014 Copy Pieza (in-image)'] || row['META — Copy Pieza (in-image)'] || '',
-      meta_labels:      row['META \u2014 Labels (Programa | Modalidad | Duraci\u00f3n)'] || row['META — Labels (Programa | Modalidad | Duración)'] || row['LABELS'] || '',
+      meta_primary:     row['META - Copy (out-of-ad)'] || row['META \u2014 Copy (out-of-ad)'] || row['META — Copy (out-of-ad)'] || row['META - Primary Text (out-of-ad)'] || row['META \u2014 Primary Text (out-of-ad)'] || row['META — Primary Text (out-of-ad)'] || '',
+      meta_creative:    row['META - Copy Pieza (in-image)'] || row['META \u2014 Copy Pieza (in-image)'] || row['META — Copy Pieza (in-image)'] || row['META - Creative Ad (in-image, 60-100 chars)'] || row['META \u2014 Creative Ad (in-image, 60-100 chars)'] || row['META — Creative Ad (in-image, 60-100 chars)'] || '',
+      meta_labels:      row['META - Labels (Programa | Modalidad | Duración)'] || row['META \u2014 Labels (Programa | Modalidad | Duraci\u00f3n)'] || row['META — Labels (Programa | Modalidad | Duración)'] || row['LABELS'] || '',
       google_headlines: [
         row['GOOGLE H1']||'', row['GOOGLE H2']||'', row['GOOGLE H3']||'',
         row['GOOGLE H4']||'', row['GOOGLE H5']||'', row['GOOGLE H6']||'',
@@ -266,8 +266,8 @@ async function loadData() {
         row['GOOGLE D1']||'', row['GOOGLE D2']||'',
         row['GOOGLE D3']||'', row['GOOGLE D4']||''
       ].filter(d => d.trim() !== ''),
-      tiktok: row['TIKTOK \u2014 Caption (max 100 chars, sin emojis)'] || row['TIKTOK — Caption (max 100 chars, sin emojis)'] || '',
-      beca: row['BECA'] || ''
+      tiktok: row['TikTok - Caption'] || row['TikTok \u2014 Caption'] || row['TIKTOK \u2014 Caption (max 100 chars, sin emojis)'] || row['TIKTOK — Caption (max 100 chars, sin emojis)'] || '',
+      beca: row['META - Beca'] || row['META \u2014 Beca'] || row['META — Beca'] || row['BECA'] || ''
     }));
 
     TOTAL = DATA.length * 3;
