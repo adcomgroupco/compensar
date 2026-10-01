@@ -210,7 +210,7 @@ body{font-family:var(--fuente);background:#F0F0F0;color:var(--dark);min-height:1
   </div>
 </div>
 <script>
-var OR='#ffd400',OR_LIGHT='#FFF8E1',OR_MID='#FFD040',DARK='#000000',YELLOW='#ffd400',BLUE='#1A55C0',GREEN='#1A6B1A';
+var OR='#ffd400',OR_LIGHT='#FFF8E1',OR_MID='#FFD040',DARK='#000000',YELLOW='#ffd400',BLUE='#1A55C0',GREEN='#1A6B1A',RED='#E02424';
 var CH={};
 var URLS={
   general:'https://docs.google.com/spreadsheets/d/e/2PACX-1vQnUPxzrG91r-mkJ9APZqhQ6IhYiLoR5dnW-dO7rjNTAPENd4PINWJHW7FOt4od_5zy70pc-nGM4iFX/pub?gid=468145068&single=true&output=csv',
@@ -723,13 +723,13 @@ function renderMedio(medios){
   CH.dona=new Chart(document.getElementById('cMedioDona'),{type:'doughnut',
     data:{labels:['Facebook','Google','TikTok'],
       datasets:[{data:[mTotals.Facebook,mTotals.Google,mTotals.Tiktok],
-        backgroundColor:[OR,BLUE,YELLOW],borderColor:['#fff','#fff','#fff'],borderWidth:3}]},
+        backgroundColor:[OR,BLUE,RED],borderColor:['#fff','#fff','#fff'],borderWidth:3}]},
     options:{responsive:true,maintainAspectRatio:false,cutout:'60%',
       plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:12}}},
         tooltip:{callbacks:{label:function(v){return v.label+': '+fmtCOP(v.raw)+' ('+(totAll>0?Math.round(v.raw/totAll*100):0)+'%)'}}}}}});
   var nivelesAll=['Pregrado','Posgrado','Técnico laboral'];
   var mediosList=['Facebook','Google','Tiktok'];
-  var colores={Facebook:OR,Google:BLUE,Tiktok:YELLOW};
+  var colores={Facebook:OR,Google:BLUE,Tiktok:RED};
   if(CH.mn)CH.mn.destroy();
   CH.mn=new Chart(document.getElementById('cMedioNivel'),{type:'bar',
     data:{labels:nivelesAll,
@@ -739,7 +739,7 @@ function renderMedio(medios){
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{position:'top',labels:{boxWidth:10,font:{size:11}}},
         tooltip:{callbacks:{label:function(v){return v.dataset.label+': '+fmtCOP(v.raw)}}}},
-      scales:{x:{stacked:true},y:{stacked:true,ticks:{callback:function(v){return fmtM(v)},font:{size:9}}}}}});
+      scales:{x:{grid:{display:false}},y:{beginAtZero:true,ticks:{callback:function(v){return fmtM(v)},font:{size:9}}}}}});
   var nmRows=nivelesAll.map(function(n){
     var mn=nmMap[n]||{};
     var tot=mediosList.reduce(function(s,m){return s+(mn[m]||0)},0);
