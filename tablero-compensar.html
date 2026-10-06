@@ -193,7 +193,7 @@ select:focus,input:focus{border-color:var(--accent-fg)}
 
     <div class="sec-title" id="sec-nivel"><span></span>Por nivel</div>
     <div class="three-col" id="nivel-grid"></div>
-    <div class="sec-title" id="sec-fuentes"><span></span>Pauta vs orgánico y otras fuentes<span class="sec-note" id="fu-note">leads y matrículas del CRM de todas las fuentes · conversión = matrículas / leads del rango · leads de la Base CRM y pagos de Base Limpia por fecha de pago (con periodo elegido, por periodo de interés) · aplican fechas, nivel y modalidad</span></div>
+    <div class="sec-title" id="sec-fuentes"><span></span>Pauta vs orgánico y otras fuentes<span class="sec-note" id="fu-note">leads y matrículas del CRM de todas las fuentes · conversión = matrículas / leads del rango · leads de la Base CRM y pagos de Base Limpia por fecha de pago · aplican fechas, nivel y modalidad</span></div>
     <div class="three-col" id="fuente-cards"></div>
     <div class="card chart-card"><div class="chart-wrap"><canvas id="chart-fu"></canvas></div></div>
     <div class="card tcard"><div class="tscroll"><table><thead id="fu-head"></thead><tbody id="fu-body"></tbody></table></div></div>
@@ -218,7 +218,7 @@ select:focus,input:focus{border-color:var(--accent-fg)}
       <div class="foot-note">
         <b>Inversión, leads plataforma y leads CRM</b>: pestaña RESUMEN GENERAL (el lead CRM ya viene asignado a la campaña).
         <b>Inscritos, admitidos y pagos</b>: pestaña Base Limpia, solo medio "MKT - PAUTA DIGITAL". Un aspirante cuenta una vez por periodo y programa; si tiene varios medios y uno es pauta, cuenta como pauta.
-        Con un periodo elegido en los atajos, la pauta se filtra por su columna PERIODO y Base Limpia por "Periodo_Merge"; con fechas libres, cada etapa se cuenta por su propia fecha (inscripción, admisión, pago).
+        Cada etapa se cuenta por su propia fecha (inscripción, admisión, pago). Con un periodo elegido en los atajos, el rango de fechas va del inicio del periodo a hoy y las metas son las del periodo completo; leads, etapas y matrículas del CRM se cuentan siempre por su fecha (las matrículas, en la fecha en que se matricularon). La inversión de pauta, con periodo elegido, se filtra por su columna PERIODO.
         <b>Metas</b>: con un periodo elegido en los atajos se toma la meta completa del periodo; con fechas libres, la parte proporcional a los días del rango. Con "Repartir" activo, la inversión y metas de campañas generales se reparten entre los programas del mismo nivel y modalidad según sus leads CRM. Branding y eventos van en su propia sección y no entran en los costos.
         Soluciones empresariales (B2B, productividad, EDTECH) no entra en la vista de educación formal: se ve eligiéndolo en el filtro de nivel y no se reparte.
       </div>
@@ -402,7 +402,8 @@ function F(){ const g = id => document.getElementById(id).value;
   return { desde: g('f-desde'), hasta: g('f-hasta'), niv: g('f-nivel'), mod: g('f-modal'), medio: g('f-medio'), prog: g('f-programa'),
     per: QUICK[0] === 'P' ? QUICK.slice(1) : '', rep: document.getElementById('f-repartir').checked } }
 // Con periodo elegido: pauta por su PERIODO y Base Limpia por Periodo_Merge. Sin periodo: cada fila por su fecha.
-const enRango = (r, f) => f.per ? r.per === f.per : (r.d >= f.desde && r.d <= f.hasta);
+// la pauta, con periodo elegido, por su columna PERIODO (2026-2B y 2027-1 corren al tiempo); el CRM siempre por fecha
+const enRango = (r, f) => (f.per && r.src === 'rg') ? r.per === f.per : (r.d >= f.desde && r.d <= f.hasta);
 const pasa = (r, f) => enRango(r, f) && (f.niv ? r.niv === f.niv : r.niv !== B2B) && (!f.mod || r.mod === f.mod) && (!f.medio || r.medio === f.medio);
 function cascade(){
   const f = F(), base = RAW.filter(r => pasa(r, f) && !r.gen);
@@ -451,15 +452,13 @@ function render(){
   ENT = entradas(f);
   const T = M(ENT.reduce((a, e) => add(a, e), Z()));
   document.getElementById('rango-note').textContent = f.per ? `periodo ${f.per} · pauta del ${fDate(f.desde)} al ${fDate(f.hasta)} ${f.hasta.slice(0,4)}` : `${fDate(f.desde)} – ${fDate(f.hasta)} ${f.hasta.slice(0,4)} · ${days(f.desde, f.hasta)} días`;
-  document.getElementById('embudo-note').textContent = f.per
-    ? (BL_PERS.has(f.per) ? `inscritos, admitidos y pagos del periodo ${f.per} en Base Limpia` : `Base Limpia no tiene registros del periodo ${f.per}: inscritos, admitidos y pagos quedan en cero`)
-    : 'inscritos, admitidos y pagos por su fecha de inscripción, admisión y pago';
+  document.getElementById('embudo-note').textContent = 'inscritos, admitidos y pagos por su fecha de inscripción, admisión y pago';
   const gen = RAW.filter(r => r.gen && pasa(r, f)).reduce((a, r) => a + r.inv, 0);
   document.getElementById('gen-note').textContent = gen ? `Campañas generales: ${fCOP(gen)}, ${f.rep ? 'repartidas entre programas según leads CRM' : 'en sus propias filas'}` : '';
   // branding y eventos no tienen nivel: solo se suman en la vista de educación formal
   const B = renderBrand(f, (r, f) => !f.niv && (f.per ? r.per === f.per : (r.d >= f.desde && r.d <= f.hasta)) && (!f.mod || r.mod === f.mod) && (!f.medio || r.medio === f.medio),
     r => r.tipo === 'Evento' ? 'Eventos' : 'Branding');
-  renderKPIs(T, B); renderFunnel(T); renderFuentes(f, (r, f) => (f.per ? r.per === f.per : (r.d >= f.desde && r.d <= f.hasta)) && (f.niv ? r.niv === f.niv : r.niv !== B2B) && (!f.mod || r.mod === f.mod)); renderNivel(); renderMedio(f); renderSemana(f); renderDetalle();
+  renderKPIs(T, B); renderFunnel(T); renderFuentes(f, (r, f) => (r.d >= f.desde && r.d <= f.hasta) && (f.niv ? r.niv === f.niv : r.niv !== B2B) && (!f.mod || r.mod === f.mod)); renderNivel(); renderMedio(f); renderSemana(f); renderDetalle();
 }
 
 function bar(p, lbl){ if(p === null) return '';
