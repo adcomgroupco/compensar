@@ -218,8 +218,8 @@ select:focus,input:focus{border-color:var(--accent-fg)}
       <div class="foot-note">
         <b>Inversión, leads plataforma y leads CRM</b>: pestaña RESUMEN GENERAL (el lead CRM ya viene asignado a la campaña).
         <b>Inscritos, admitidos y pagos</b>: pestaña Base Limpia, solo medio "MKT - PAUTA DIGITAL". Un aspirante cuenta una vez por periodo y programa; si tiene varios medios y uno es pauta, cuenta como pauta.
-        Cada etapa se cuenta por su propia fecha (inscripción, admisión, pago). Con un periodo elegido en los atajos, el rango de fechas va del inicio del periodo a hoy y las metas son las del periodo completo; leads, etapas y matrículas del CRM se cuentan siempre por su fecha (las matrículas, en la fecha en que se matricularon). La inversión de pauta, con periodo elegido, se filtra por su columna PERIODO.
-        <b>Metas</b>: con un periodo elegido en los atajos se toma la meta completa del periodo; con fechas libres, la parte proporcional a los días del rango. Con "Repartir" activo, la inversión y metas de campañas generales se reparten entre los programas del mismo nivel y modalidad según sus leads CRM. Branding y eventos van en su propia sección y no entran en los costos.
+        Cada etapa se cuenta por su propia fecha (inscripción, admisión, pago). Leads, etapas y matrículas del CRM se cuentan siempre por su fecha (las matrículas, en la fecha en que se matricularon).
+        <b>Metas</b>: solo las del periodo 2027-1, en la parte proporcional a los días del rango elegido (las fechas del tablero no cambian por el periodo). Con "Repartir" activo, la inversión y metas de campañas generales se reparten entre los programas del mismo nivel y modalidad según sus leads CRM. Branding y eventos van en su propia sección y no entran en los costos.
         Soluciones empresariales (B2B, productividad, EDTECH) no entra en la vista de educación formal: se ve eligiéndolo en el filtro de nivel y no se reparte.
       </div>
     </div>
@@ -238,6 +238,8 @@ const MESES = ['','ene','feb','mar','abr','may','jun','jul','ago','sep','oct','n
 const ACAD = ['Pregrado','Posgrado','Técnico laboral'];
 const GENERAL = 'General', B2B = 'Soluciones empresariales';
 const NIVELES = [...ACAD, B2B];
+// Las metas y presupuestos salen solo de este periodo; las fechas del tablero no cambian con él.
+const META_PER = '2027-1';
 const CANALES = ['Facebook','Google','TikTok','Linkedin'];
 
 let RAW = [], METAS = [], PERIODOS = {}, DISP = {}, BL_PERS = new Set(), BRAND = [], BRAND_METAS = [];
@@ -371,11 +373,12 @@ function build(rg, metas, base, crm){
 }
 
 function prepare(){
-  const ps = Object.keys(PERIODOS).filter(p => RAW.some(r => r.src === 'rg' && r.per === p)).sort();
-  const q = [['sem','Esta semana'],['semAnt','Semana pasada'],['mes','Este mes']].concat(ps.map(p => ['P'+p, p]));
-  document.getElementById('quick').innerHTML = q.map(([k,l]) => `<button class="qbtn" data-q="${k}" onclick="setQuick('${k}')">${l}</button>`).join('');
-  const hoy = todayISO(), act = ps.slice().reverse().find(p => PERIODOS[p][0] <= hoy && PERIODOS[p][1] >= addDays(hoy, -10));
-  setQuick(QUICK && (QUICK[0] !== 'P' || PERIODOS[QUICK.slice(1)]) ? QUICK : act ? 'P'+act : 'mes');
+  const q = [['sem','Esta semana'],['semAnt','Semana pasada'],['mes','Este mes']];
+  document.getElementById('quick').innerHTML = q.map(([k,l]) => `<button class="qbtn" data-q="${k}" onclick="setQuick('${k}')">${l}</button>`).join('')
+    + `<span class="sec-note">metas ${META_PER}</span>`;
+  // con fechas libres (QUICK vacío) se respetan las que ya estén puestas
+  if(!QUICK && document.getElementById('f-desde').value && document.getElementById('f-hasta').value){ cascade(); render() }
+  else setQuick(QUICK || 'mes');
 }
 
 // ── Filtros ──────────────────────────────────────────────────────────────────
@@ -410,7 +413,7 @@ function cascade(){
   fill('f-programa', [...new Set(base.map(r => r.pk))].sort((x, y) => D(x).localeCompare(D(y))), f.prog, D);
 }
 function resetFilters(){ ['f-nivel','f-modal','f-medio','f-programa'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('f-repartir').checked = true; document.getElementById('q').value = ''; QUICK = ''; prepare() }
+  document.getElementById('f-repartir').checked = true; document.getElementById('q').value = ''; setQuick('mes') }
 
 // ── Cálculo ──────────────────────────────────────────────────────────────────
 const Z = () => ({inv:0, invG:0, lp:0, lc:0, ins:0, adm:0, mat:0, ppto:0, lm:0, mm:0});
@@ -424,7 +427,7 @@ function entradas(f){
   const E = {}, get = (niv, mod, pk, gen) => { const k = [niv, mod, pk].join('|'); return E[k] = E[k] || { ...Z(), niv, mod, pk, gen } };
   RAW.forEach(r => { if(pasa(r, f)) add(get(r.niv, r.mod, r.pk, r.gen), r) });
   if(!f.medio) METAS.forEach(m => {
-    if(f.per && m.per !== f.per) return; if(f.niv ? m.niv !== f.niv : m.niv === B2B) return; if(f.mod && m.mod !== f.mod) return;
+    if(m.per !== META_PER) return; if(f.niv ? m.niv !== f.niv : m.niv === B2B) return; if(f.mod && m.mod !== f.mod) return;
     const s = share(m, f); if(!s) return;
     const e = get(m.niv, m.mod, m.pk, m.gen);
     e.ppto += m.ppto * s; e.lm += m.lm * s; e.mm += m.mm * s });
@@ -588,7 +591,7 @@ function renderDetalle(){
 }
 // ── Branding y eventos (sección aparte: fuera de los costos del embudo y de la tabla de programas) ──
 function renderBrand(f, enR, grupoDe){
-  const rows = BRAND.filter(r => r.inv && enR(r, f)), metas = BRAND_METAS.filter(m => (!f.per || !m.per || m.per === f.per) && (!f.niv || !m.niv || m.niv === f.niv) && (!f.mod || !m.mod || m.mod === f.mod));
+  const rows = BRAND.filter(r => r.inv && enR(r, f)), metas = BRAND_METAS.filter(m => m.per === META_PER && (!f.niv || !m.niv || m.niv === f.niv) && (!f.mod || !m.mod || m.mod === f.mod));
   const medios = CANAL_ORDER.filter(c => rows.some(r => r.medio === c && r.inv));
   const conLp = rows.some(r => r.lp), G = {};
   rows.forEach(r => { const g = G[grupoDe(r)] = G[grupoDe(r)] || {inv:0, lp:0, ppto:0, items:{}};
