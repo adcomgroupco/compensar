@@ -322,7 +322,9 @@ function build(rg, metas, base, crm){
   const span = (per, d) => { if(!per || !d) return; const p = PERIODOS[per] = PERIODOS[per] || [d, d]; if(d < p[0]) p[0] = d; if(d > p[1]) p[1] = d };
   // RESUMEN GENERAL: Fecha | Campaña | Costo | Leads plat. | Canal | CPL | PERIODO | SEDE | NIVEL | MODALIDAD | PROGRAMA | LEAD CRM | CPL CRM | Mes | Tipo de pauta
   rg.forEach(x => {
-    const d = iso(x[0]), niv = nivel(x[8]), nm = String(x[10]||'').trim(), per = String(x[6]||'').trim();
+    const d = iso(x[0]), niv = nivel(x[8]), per = String(x[6]||'').trim();
+    // Homologación SENA llega como CAMPAÑA GENERAL en la hoja: va en su propia fila del nivel y no se reparte
+    const nm = /homologaci[oó]n.?sena/i.test(x[1]) ? 'HOMOLOGACIÓN SENA' : String(x[10]||'').trim();
     if(!d || !niv || !nm) return;
     const mod = modal(x[9]) || modal(x[7]) || 'Presencial', medio = String(x[4]||'').trim() || 'Otro';
     span(per, d);
