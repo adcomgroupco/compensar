@@ -219,7 +219,7 @@ select:focus,input:focus{border-color:var(--accent-fg)}
         <b>Inversión, leads plataforma y leads CRM</b>: pestaña RESUMEN GENERAL (el lead CRM ya viene asignado a la campaña).
         <b>Inscritos, admitidos y pagos</b>: pestaña Base Limpia, solo medio "MKT - PAUTA DIGITAL". Un aspirante cuenta una vez por periodo y programa; si tiene varios medios y uno es pauta, cuenta como pauta.
         Cada etapa se cuenta por su propia fecha (inscripción, admisión, pago). Leads, etapas y matrículas del CRM se cuentan siempre por su fecha (las matrículas, en la fecha en que se matricularon).
-        <b>Metas</b>: solo las del periodo 2027-1. Con el botón "Meta 2027-1" encendido se toma la meta total del periodo; apagado, la parte proporcional a los días del rango. En los dos casos lo logrado (inversión, leads, matrículas) se cuenta por las fechas elegidas. Con "Repartir" activo, la inversión y metas de campañas generales se reparten entre los programas del mismo nivel y modalidad según sus leads CRM. Branding y eventos van en su propia sección y no entran en los costos.
+        <b>CRM Meta, CRM Google…</b>: leads CRM de cada medio (las campañas generales no se reparten aquí). <b>Lead → pago</b>: pagos sobre leads CRM. <b>Metas</b>: solo las del periodo 2027-1. Con el botón "Meta 2027-1" encendido se toma la meta total del periodo; apagado, la parte proporcional a los días del rango. En los dos casos lo logrado (inversión, leads, matrículas) se cuenta por las fechas elegidas. Con "Repartir" activo, la inversión y metas de campañas generales se reparten entre los programas del mismo nivel y modalidad según sus leads CRM. Branding y eventos van en su propia sección y no entran en los costos.
         Soluciones empresariales (B2B, productividad, EDTECH) no entra en la vista de educación formal: se ve eligiéndolo en el filtro de nivel y no se reparte.
       </div>
     </div>
@@ -319,7 +319,7 @@ function build(rg, metas, base, crm){
   const perDe = v => { const s = String(v||'').trim(), m = s.match(/^(\d{4})-(\d{1,2})-1$/); return m ? m[1] + '-' + m[2] : s };
   crm.forEach(x => { const d = iso(x[0]), niv = nivel(x[2]); if(!d || !niv) return;
     FUE.push({ d, per: perDe(x[4]), niv, mod: modal(x[3]) || 'Presencial', fu: fuenteDe(String(x[1]||'').trim()), lc: num(x[5]), mat: 0 }) });
-  const row = o => RAW.push({ inv:0, lp:0, lc:0, ins:0, adm:0, mat:0, per:'', ...o });
+  const row = o => { const r = { inv:0, lp:0, lc:0, ins:0, adm:0, mat:0, per:'', ...o }; if(r.lc && r.medio) r[lcKey(r.medio)] = r.lc; RAW.push(r) };
   const span = (per, d) => { if(!per || !d) return; const p = PERIODOS[per] = PERIODOS[per] || [d, d]; if(d < p[0]) p[0] = d; if(d > p[1]) p[1] = d };
   // RESUMEN GENERAL: Fecha | Campaña | Costo | Leads plat. | Canal | CPL | PERIODO | SEDE | NIVEL | MODALIDAD | PROGRAMA | LEAD CRM | CPL CRM | Mes | Tipo de pauta
   rg.forEach(x => {
@@ -420,7 +420,10 @@ function resetFilters(){ ['f-nivel','f-modal','f-medio','f-programa'].forEach(id
   document.getElementById('f-repartir').checked = true; document.getElementById('q').value = ''; setQuick('mes') }
 
 // ── Cálculo ──────────────────────────────────────────────────────────────────
-const Z = () => ({inv:0, invG:0, lp:0, lc:0, ins:0, adm:0, mat:0, ppto:0, lm:0, mm:0});
+const Z = () => ({inv:0, invG:0, lp:0, lc:0, ins:0, adm:0, mat:0, ppto:0, lm:0, mm:0, lcF:0, lcG:0, lcT:0, lcL:0, lcP:0, lcO:0});
+// leads CRM por medio (columnas de la tabla de programas; no se reparten)
+const LCM = [['lcF','Meta'],['lcG','Google'],['lcT','TikTok'],['lcL','LinkedIn'],['lcP','Programática'],['lcO','Otros']];
+const lcKey = m => { const t = norm(m); return /FACE|META|INSTA/.test(t) ? 'lcF' : /GOOGLE/.test(t) ? 'lcG' : /TIKTOK/.test(t) ? 'lcT' : /LINKEDIN/.test(t) ? 'lcL' : /PROGRAM/.test(t) ? 'lcP' : 'lcO' };
 const NUM = Object.keys(Z());
 function add(a, b){ NUM.forEach(k => a[k] += b[k] || 0); return a }
 function M(e){ return { ...e, dif: e.lp ? e.lc/e.lp - 1 : null, cplP: div(e.inv, e.lp), cplC: div(e.inv, e.lc), cpi: div(e.inv, e.ins), cpa: div(e.inv, e.adm), cpm: div(e.inv, e.mat),
@@ -534,7 +537,7 @@ function renderMedio(f){
   const rows = filasRango(f);
   const lbl = {Facebook:'Meta (Facebook e Instagram)', Google:'Google Ads', TikTok:'TikTok', Linkedin:'LinkedIn', Otro:'Otro detalle de medio (Base Limpia)'};
   const orden = (a, b) => (CANALES.indexOf(a) + 1 || 9) - (CANALES.indexOf(b) + 1 || 9);
-  const cols = COLS_BASE.filter(c => c[0] !== 'conv'); cols.splice(cols.findIndex(c => c[0] === 'cpm'), 0, ['cpi','Costo / insc.','cop']);
+  const cols = COLS_BASE.slice(); cols.splice(cols.findIndex(c => c[0] === 'cpm'), 0, ['cpi','Costo / insc.','cop']);
   const porNivel = MEDIO_VISTA === 'niv';
   document.getElementById('medio-head').innerHTML = head(porNivel ? 'Nivel / medio' : 'Medio', cols, false);
   const fila = (cl, lab, e) => `<tr${cl ? ` class="${cl}"` : ''}><td>${lab}</td>` + cols.map(c => cell(M(e), c)).join('') + '</tr>';
@@ -586,9 +589,11 @@ function sortBy(col){ SORT.dir = SORT.col === col ? -SORT.dir : -1; SORT.col = c
 function sorter(a, b){ const x = a.m[SORT.col], y = b.m[SORT.col];
   if(x === null && y === null) return 0; if(x === null) return 1; if(y === null) return -1; return SORT.dir * (x - y) }
 function renderDetalle(){
-  const cols = COLS_BASE.filter(c => c[0] !== 'dif' && c[0] !== 'cplP' && c[0] !== 'conv');
+  const cols = COLS_BASE.filter(c => c[0] !== 'dif' && c[0] !== 'cplP');
   cols.splice(cols.findIndex(c => c[0] === 'cpm'), 0, ['cpi','Costo / insc.','cop'], ['cpa','Costo / adm.','cop']);
   cols.push(...COLS_META);
+  const lcCols = LCM.filter(([k]) => ENT.some(e => e[k])).map(([k, l]) => [k, 'CRM ' + l, 'n']);
+  cols.splice(cols.findIndex(c => c[0] === 'lc') + 1, 0, ...lcCols);
   const q = norm(document.getElementById('q').value);
   document.getElementById('det-head').innerHTML = head('Nivel / modalidad / programa', cols, true);
   const ents = ENT.filter(e => !q || norm(D(e.pk) + ' ' + e.mod + ' ' + e.niv).includes(q));
