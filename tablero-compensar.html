@@ -291,7 +291,8 @@ function nivel(n){ const s = norm(n);
   return '' }
 const modal = s => /virtual/i.test(s) ? 'Virtual' : /presencial|bogot/i.test(s) ? 'Presencial' : '';
 // Campañas generales de leads (sin programa): se pueden repartir entre los programas de su nivel y modalidad.
-const esGeneral = (niv, nm) => /^CAMPANA GENERAL/.test(pkey(nm));
+// CAMPAÑA GENERAL SENA (homologación) tiene fila propia y no se reparte.
+const esGeneral = (niv, nm) => /^CAMPANA GENERAL/.test(pkey(nm)) && pkey(nm) !== 'CAMPANA GENERAL SENA';
 function canalBL(det){ const s = norm(det);
   if(s.startsWith('GOOGLE')) return 'Google'; if(s.startsWith('FACEBOOK') || s.startsWith('INSTAGRAM') || s.startsWith('META')) return 'Facebook';
   if(s.startsWith('TIKTOK')) return 'TikTok'; if(s.startsWith('LINKEDIN')) return 'Linkedin'; return 'Otro' }
@@ -322,9 +323,7 @@ function build(rg, metas, base, crm){
   const span = (per, d) => { if(!per || !d) return; const p = PERIODOS[per] = PERIODOS[per] || [d, d]; if(d < p[0]) p[0] = d; if(d > p[1]) p[1] = d };
   // RESUMEN GENERAL: Fecha | Campaña | Costo | Leads plat. | Canal | CPL | PERIODO | SEDE | NIVEL | MODALIDAD | PROGRAMA | LEAD CRM | CPL CRM | Mes | Tipo de pauta
   rg.forEach(x => {
-    const d = iso(x[0]), niv = nivel(x[8]), per = String(x[6]||'').trim();
-    // Homologación SENA llega como CAMPAÑA GENERAL en la hoja: va en su propia fila del nivel y no se reparte
-    const nm = /homologaci[oó]n.?sena/i.test(x[1]) ? 'HOMOLOGACIÓN SENA' : String(x[10]||'').trim();
+    const d = iso(x[0]), niv = nivel(x[8]), nm = String(x[10]||'').trim(), per = String(x[6]||'').trim();
     if(!d || !niv || !nm) return;
     const mod = modal(x[9]) || modal(x[7]) || 'Presencial', medio = String(x[4]||'').trim() || 'Otro';
     span(per, d);
