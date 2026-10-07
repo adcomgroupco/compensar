@@ -219,7 +219,7 @@ select:focus,input:focus{border-color:var(--accent-fg)}
         <b>Inversión, leads plataforma y leads CRM</b>: pestaña RESUMEN GENERAL (el lead CRM ya viene asignado a la campaña).
         <b>Inscritos, admitidos y pagos</b>: pestaña Base Limpia, solo medio "MKT - PAUTA DIGITAL". Un aspirante cuenta una vez por periodo y programa; si tiene varios medios y uno es pauta, cuenta como pauta.
         Cada etapa se cuenta por su propia fecha (inscripción, admisión, pago). Leads, etapas y matrículas del CRM se cuentan siempre por su fecha (las matrículas, en la fecha en que se matricularon).
-        <b>Metas</b>: solo las del periodo 2027-1, en la parte proporcional a los días del rango elegido (las fechas del tablero no cambian por el periodo). Con "Repartir" activo, la inversión y metas de campañas generales se reparten entre los programas del mismo nivel y modalidad según sus leads CRM. Branding y eventos van en su propia sección y no entran en los costos.
+        <b>Metas</b>: solo las del periodo 2027-1. Con el botón "Meta 2027-1" encendido se toma la meta total del periodo; apagado, la parte proporcional a los días del rango. En los dos casos lo logrado (inversión, leads, matrículas) se cuenta por las fechas elegidas. Con "Repartir" activo, la inversión y metas de campañas generales se reparten entre los programas del mismo nivel y modalidad según sus leads CRM. Branding y eventos van en su propia sección y no entran en los costos.
         Soluciones empresariales (B2B, productividad, EDTECH) no entra en la vista de educación formal: se ve eligiéndolo en el filtro de nivel y no se reparte.
       </div>
     </div>
@@ -240,6 +240,8 @@ const GENERAL = 'General', B2B = 'Soluciones empresariales';
 const NIVELES = [...ACAD, B2B];
 // Las metas y presupuestos salen solo de este periodo; las fechas del tablero no cambian con él.
 const META_PER = '2027-1';
+// Con el botón del periodo encendido la meta es la total del periodo; lo logrado se sigue contando por las fechas elegidas.
+let META_TOTAL = false;
 const CANALES = ['Facebook','Google','TikTok','Linkedin'];
 
 let RAW = [], METAS = [], PERIODOS = {}, DISP = {}, BL_PERS = new Set(), BRAND = [], BRAND_METAS = [];
@@ -375,7 +377,7 @@ function build(rg, metas, base, crm){
 function prepare(){
   const q = [['sem','Esta semana'],['semAnt','Semana pasada'],['mes','Este mes']];
   document.getElementById('quick').innerHTML = q.map(([k,l]) => `<button class="qbtn" data-q="${k}" onclick="setQuick('${k}')">${l}</button>`).join('')
-    + `<span class="sec-note">metas ${META_PER}</span>`;
+    + `<span class="f-sep"></span><button class="qbtn" data-mt onclick="toggleMetaTotal()" title="Meta total del periodo ${META_PER}; las fechas no cambian">Meta ${META_PER}</button>`;
   // con fechas libres (QUICK vacío) se respetan las que ya estén puestas
   if(!QUICK && document.getElementById('f-desde').value && document.getElementById('f-hasta').value){ cascade(); render() }
   else setQuick(QUICK || 'mes');
@@ -393,17 +395,18 @@ function setQuick(k){
   else { const p = PERIODOS[k.slice(1)]; a = p[0]; b = p[1] < hoy ? p[1] : hoy }
   document.getElementById('f-desde').value = a; document.getElementById('f-hasta').value = b;
   QUICK = k; cascade(); render() }
+function toggleMetaTotal(){ META_TOTAL = !META_TOTAL; render() }
 function onDate(){ QUICK = ''; cascade(); render() }
 function onSel(){ cascade(); render() }
 // Parte de una meta que entra en el filtro: con un periodo elegido, la meta completa de ese periodo;
 // con fechas libres, proporcional a los días del rango que caen dentro de la meta.
 function share(m, f){
-  if(f.per) return m.per === f.per ? 1 : 0;
+  if(META_TOTAL) return m.per === META_PER ? 1 : 0;
   const a = m.ini > f.desde ? m.ini : f.desde, b = m.fin < f.hasta ? m.fin : f.hasta;
   return a > b ? 0 : days(a, b) / days(m.ini, m.fin) }
 function F(){ const g = id => document.getElementById(id).value;
   return { desde: g('f-desde'), hasta: g('f-hasta'), niv: g('f-nivel'), mod: g('f-modal'), medio: g('f-medio'), prog: g('f-programa'),
-    per: QUICK[0] === 'P' ? QUICK.slice(1) : '', rep: document.getElementById('f-repartir').checked } }
+    per: '', rep: document.getElementById('f-repartir').checked } }
 // Con periodo elegido: pauta por su PERIODO y Base Limpia por Periodo_Merge. Sin periodo: cada fila por su fecha.
 // la pauta, con periodo elegido, por su columna PERIODO (2026-2B y 2027-1 corren al tiempo); el CRM siempre por fecha
 const enRango = (r, f) => (f.per && r.src === 'rg') ? r.per === f.per : (r.d >= f.desde && r.d <= f.hasta);
@@ -452,6 +455,7 @@ let ENT = [];
 function render(){
   const f = F(); if(!f.desde || !f.hasta) return;
   document.querySelectorAll('.qbtn[data-q]').forEach(b => b.classList.toggle('on', b.dataset.q === QUICK));
+  document.querySelectorAll('.qbtn[data-mt]').forEach(b => b.classList.toggle('on', META_TOTAL));
   ENT = entradas(f);
   const T = M(ENT.reduce((a, e) => add(a, e), Z()));
   document.getElementById('rango-note').textContent = f.per ? `periodo ${f.per} · pauta del ${fDate(f.desde)} al ${fDate(f.hasta)} ${f.hasta.slice(0,4)}` : `${fDate(f.desde)} – ${fDate(f.hasta)} ${f.hasta.slice(0,4)} · ${days(f.desde, f.hasta)} días`;
@@ -470,7 +474,7 @@ function renderKPIs(T, B){
   const k = (l, v, sub, extra) => `<div class="card kpi-card"><div class="kpi-label">${l}</div><div class="kpi-value">${v}</div>${sub ? `<div class="kpi-sub">${sub}</div>` : ''}${extra || ''}</div>`;
   const cplMeta = div(T.ppto, T.lm);
   document.getElementById('kpi-grid').innerHTML = [
-    k('Inversión total', fCOP(T.inv + B.inv), `conversión ${fCOP(T.inv)} · branding y eventos ${fCOP(B.inv)}`, bar(div(T.inv + B.inv, T.ppto + B.ppto), (QUICK[0] === 'P' ? 'Ejecución vs presupuesto del periodo ' : 'Ejecución vs presupuesto proporcional al rango ') + fCOP(T.ppto + B.ppto))),
+    k('Inversión total', fCOP(T.inv + B.inv), `conversión ${fCOP(T.inv)} · branding y eventos ${fCOP(B.inv)}`, bar(div(T.inv + B.inv, T.ppto + B.ppto), (META_TOTAL ? 'Ejecución vs presupuesto del periodo ' : 'Ejecución vs presupuesto proporcional al rango ') + fCOP(T.ppto + B.ppto))),
     k('Leads plataforma', fN(T.lp), 'CPL plataforma ' + fCOP(T.cplP)),
     k('Leads CRM', fN(T.lc), `<span class="${difCls(T.dif)}">${T.dif === null ? '' : (T.dif > 0 ? '+' : '') + fP(T.dif) + ' vs plataforma'}</span>`, bar(T.cumL, 'Meta ' + fN(T.lm))),
     k('CPL CRM', fCOP(T.cplC), cplMeta ? 'CPL meta ' + fCOP(cplMeta) : ''),
@@ -479,7 +483,7 @@ function renderKPIs(T, B){
     k('Pagos (matrículas)', fN(T.mat), fP(T.conv) + ' de los leads CRM', bar(T.cumM, 'Meta ' + fN(T.mm))),
     k('Costo por matrícula', fCOP(T.cpm), T.mm ? 'meta ' + fCOP(div(T.ppto, T.mm)) : ''),
     k('Costo por matrícula total', fCOP(div(T.inv + B.inv, T.mat)), 'incluye branding y eventos'),
-    k(QUICK[0] === 'P' ? 'Meta de matrículas del periodo' : 'Meta de matrículas del rango', fN(T.mm), !T.mm ? 'sin meta cargada para el rango' : QUICK[0] === 'P' ? 'meta completa del periodo' : 'proporcional a los días elegidos'),
+    k(META_TOTAL ? 'Meta de matrículas del periodo' : 'Meta de matrículas del rango', fN(T.mm), !T.mm ? 'sin meta cargada para el rango' : META_TOTAL ? 'meta completa del periodo' : 'proporcional a los días elegidos'),
   ].join('');
 }
 function renderFunnel(T){
