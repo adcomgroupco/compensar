@@ -448,7 +448,7 @@ function card(ad){
   const seen=new Set();
   S.homoKeys.forEach(k=>{const v=ad.h[k];if(!v||/programa/i.test(k)||seen.has(norm(v))) return;seen.add(norm(v));(v.length>28||/facultad/i.test(k)?long:short).push([k,v])});
   const rows=[...long,
-    ['URL',ad.destination_url?'<a href="'+esc(ad.destination_url)+'" target="_blank" rel="noopener">'+esc(ad.destination_url.replace(/^https?:\/\//,''))+'</a>':'']
+    ['URL',ad.destination_url?'<a href="'+esc(ad.destination_url)+'" target="_blank" rel="noopener">'+esc(ad.destination_url.replace(/^https?:\/\//,''))+'</a>':ad.lead_form?'Formulario instantáneo de Meta':'']
   ].filter(r=>r[1]);
   let det='';
   if(ad.medium==='Google'){
