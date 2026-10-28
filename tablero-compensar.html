@@ -439,7 +439,7 @@ const lcKey = m => { const t = norm(m); return /FACE|META|INSTA/.test(t) ? 'lcF'
 const NUM = Object.keys(Z());
 function add(a, b){ NUM.forEach(k => a[k] += b[k] || 0); return a }
 function M(e){ return { ...e, dif: e.lp ? e.lc/e.lp - 1 : null, cplP: div(e.inv, e.lp), cplC: div(e.inv, e.lc), cpi: div(e.inv, e.ins), cpa: div(e.inv, e.adm), cpm: div(e.inv, e.mat),
-  conv: div(e.mat, e.lc), cumL: div(e.lc, e.lm), cumM: div(e.mat, e.mm), cumI: div(e.inv, e.ppto),
+  conv: div(e.mat, e.lc), ia: div(e.adm, e.ins), ap: div(e.mat, e.adm), cumL: div(e.lc, e.lm), cumM: div(e.mat, e.mm), cumI: div(e.inv, e.ppto),
   cumP: div(e.inv, e.pm), cumLm: div(e.lc, e.lmm), cplM: div(e.pm, e.lmm) } }
 
 // Entradas por nivel·modalidad·programa (con metas y reparto), luego filtro de programa
@@ -575,6 +575,8 @@ function renderMedio(f){
   const lbl = {Facebook:'Meta (Facebook e Instagram)', Google:'Google Ads', TikTok:'TikTok', Linkedin:'LinkedIn', Otro:'Otro detalle de medio (Base Limpia)'};
   const orden = (a, b) => (CANALES.indexOf(a) + 1 || 9) - (CANALES.indexOf(b) + 1 || 9);
   const cols = COLS_BASE.slice(); cols.splice(cols.findIndex(c => c[0] === 'cpm'), 0, ['cpi','Costo / insc.','cop']);
+  cols.splice(cols.findIndex(c => c[0] === 'adm') + 1, 0, ['ia','Insc. → adm.','pct']);
+  cols.splice(cols.findIndex(c => c[0] === 'mat') + 1, 0, ['ap','Adm. → pago','pct']);
   const porNivel = MEDIO_VISTA === 'niv';
   document.getElementById('medio-head').innerHTML = head(porNivel ? 'Nivel / medio' : 'Medio', cols, false);
   const fila = (cl, lab, e) => `<tr${cl ? ` class="${cl}"` : ''}><td>${lab}</td>` + cols.map(c => cell(M(e), c)).join('') + '</tr>';
