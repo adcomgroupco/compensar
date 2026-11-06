@@ -10,7 +10,7 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --meta:#1877F2;--google:#4285F4;--tiktok:#fe2c55;
+  --meta:#1877F2;--google:#4285F4;--tiktok:#fe2c55;--linkedin:#0A66C2;
   /* colores de las apps: el mockup imita la pantalla real, no sigue el tema del tablero */
   --app-bg:#fff;--app-fg:#050505;--app-mute:#65676b;--app-line:#e4e6eb;--app-soft:#f0f2f5;
 }
@@ -159,6 +159,17 @@ a{color:inherit}
 .tt .foot small{display:inline-block;background:rgba(255,255,255,.2);font-size:10px;padding:1px 5px;border-radius:3px;margin-top:5px}
 .tt .foot .btn{margin-top:9px;background:var(--tiktok);text-align:center;font-weight:700;padding:8px;border-radius:4px}
 
+/* LinkedIn */
+.li-bar{display:flex;align-items:center;gap:8px;padding:4px 12px 8px;border-bottom:1px solid var(--app-line)}
+.li-bar b{background:#0a66c2;color:#fff;border-radius:3px;font-size:13px;font-weight:800;padding:0 4px;line-height:19px;font-family:Helvetica,Arial,sans-serif}
+.li-bar span{flex:1;height:24px;border-radius:4px;background:var(--app-soft)}
+.li-art{background:#eef3f8;padding:6px 12px 8px}
+.li-art strong{display:block;font-size:12.5px;line-height:1.3;color:#000}
+.li-art small{font-size:10.5px;color:var(--app-mute)}
+.li-cta{margin:2px 12px 10px;display:inline-block;border:1.5px solid #0a66c2;color:#0a66c2;font-weight:700;font-size:12px;border-radius:999px;padding:5px 14px}
+.li-act{border-top:1px solid var(--app-line)}
+.tag.warn{background:#fdecea;color:#b3261e}
+
 /* ficha */
 .info{padding:16px 18px 18px;display:flex;flex-direction:column;gap:10px;flex:1}
 .prog-n{font-size:1rem;font-weight:700;letter-spacing:-.02em;line-height:1.25}
@@ -216,6 +227,7 @@ details[open] summary::after{content:"–"}
     <button class="tab" data-tab="Meta"><span class="dot" style="background:var(--meta)"></span>Meta <span class="n" id="n-Meta">0</span></button>
     <button class="tab" data-tab="Google"><span class="dot" style="background:var(--google)"></span>Google <span class="n" id="n-Google">0</span></button>
     <button class="tab" data-tab="TikTok"><span class="dot" style="background:var(--tiktok)"></span>TikTok <span class="n" id="n-TikTok">0</span></button>
+    <button class="tab" data-tab="LinkedIn"><span class="dot" style="background:var(--linkedin)"></span>LinkedIn <span class="n" id="n-LinkedIn">0</span></button>
   </div>
   <div id="filters" style="display:contents"></div>
   <div class="seg" id="view" title="Cómo se muestran los anuncios de Meta">
@@ -230,8 +242,8 @@ details[open] summary::after{content:"–"}
 
 <script>
 // Los anuncios salen de data/anuncios-compensar.json, que genera Ads-CLI
-// (scripts/clients/compensar/anuncios_tablero.py) con las APIs de Meta, Google y TikTok.
-// La homologación se lee en vivo del Sheet del tablero; si falla, se usa la copia del JSON.
+// (scripts/clients/compensar/anuncios_tablero.py) con las APIs de Meta, Google, TikTok y LinkedIn.
+// La homologación se lee en vivo del Sheet del tablero y se cruza por nombre de campaña (exacto); si falla, se usa la copia del JSON.
 const DATA_URL='data/anuncios-compensar.json';
 const SHEET_ID='1xmmiAs6xs3CDatpA7hmgh7KJdv85vnznnxc6WOMjiUU';
 const HOMO_URL='https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:csv&sheet='+encodeURIComponent('Homologación');
@@ -259,7 +271,7 @@ async function init(){
     return
   }
   S.avatars=d.avatars||{};
-  S.ads=[...(d.m||[]),...(d.g||[]),...(d.t||[])];
+  S.ads=[...(d.m||[]),...(d.g||[]),...(d.t||[]),...(d.l||[])];
   S.ads.forEach((a,i)=>a._i=i);
   S.homoRows=d.h||[];S.homoKeys=d.hk||[];
   const old=(Date.now()-new Date(d.generado))/36e5>72;
@@ -292,22 +304,14 @@ const campCol=r=>Object.keys(r).find(k=>/campa|campaign/i.test(k))||Object.keys(
 const campKey=r=>r[campCol(r)]||'';
 function homoKeysOf(rows){const c=campCol(rows[0]);return Object.keys(rows[0]).filter(k=>k!==c&&k.trim())}
 async function loadHomo(){const r=await fetch(HOMO_URL+'&_cb='+Date.now());if(!r.ok) throw new Error('HTTP '+r.status);return parseCSV(await r.text())}
-function lookup(name,fuzzy){
-  const k=norm(name);if(!k) return null;
-  const R=S.homoRows;
-  const hit=R.find(r=>norm(campKey(r))===k)||R.find(r=>{const rk=norm(campKey(r));return rk.length>4&&(k.includes(rk)||rk.includes(k))});
-  if(hit||!fuzzy) return hit||null;
-  let best=null,bs=0;const pw=new Set(k.split(/[\s_\-]+/).filter(w=>w.length>3));
-  for(const r of R){
-    const rw=new Set(norm(campKey(r)).split(/[\s_\-]+/).filter(w=>w.length>3));
-    if(!pw.size||!rw.size) continue;
-    const sc=[...pw].filter(w=>rw.has(w)).length/Math.max(pw.size,rw.size);
-    if(sc>bs&&sc>=.3){bs=sc;best=r}
-  }
-  return best
+const ck=s=>norm(s).replace(/[\s\-–]+$/,'');
+function lookup(name){
+  // Cruce exacto por nombre de campaña (sin tildes, mayúsculas ni guion final): el Sheet es la fuente.
+  const k=ck(name);if(!k) return null;
+  return S.homoRows.find(r=>ck(campKey(r))===k)||null
 }
 function applyH(ad){
-  const h=lookup(ad.campaign_name,ad.medium==='Google');
+  const h=lookup(ad.campaign_name);
   ad.h={};
   if(h) S.homoKeys.forEach(k=>{if(h[k]) ad.h[k]=h[k]});
   const f=re=>{const k=Object.keys(ad.h).find(k=>re.test(k));return k?ad.h[k]:''};
@@ -422,6 +426,19 @@ function tiktokScreen(ad){
     +'<div class="foot"><b>'+esc(ad.headline||'UCompensar')+'</b>'+esc(ad.body_text||'')+'<br><small>Patrocinado</small>'+(ad.cta?'<div class="btn">'+esc(ad.cta)+'</div>':'')+'</div></div>'
 }
 
+/* ── LinkedIn ── */
+function linkedinFeed(ad){
+  const m=ad.feed,txt=ad.body_text||'',cut=txt.length>140||txt.split('\n').length>3;
+  const short=cut?txt.split('\n').filter(l=>l.trim()).slice(0,2).join('\n').slice(0,140).replace(/\s+\S*$/,'')+'…':txt;
+  return STATUS+'<div class="scroll"><div class="li-bar"><b>in</b><span></span></div>'
+    +'<div class="post-h">'+avatar(ad)+'<div><div class="nm">'+esc(ad.page||'UCompensar (Oficial)')+'</div><div class="pb">Promocionado</div></div><span class="dots">···</span></div>'
+    +(txt?'<div class="copy" data-short="'+esc(short)+'" data-full="'+esc(txt)+'">'+esc(short)+(cut?' <button class="more" data-act="more">Ver más</button>':'')+'</div>':'')
+    +'<div class="media" style="aspect-ratio:'+ratio(m)+'">'+mediaHtml(m,false)+'</div>'
+    +'<div class="li-art"><strong>'+esc(ad.headline||host(ad.destination_url))+'</strong><small>'+esc(host(ad.destination_url))+'</small></div>'
+    +(ad.cta?'<span class="li-cta">'+esc(ad.cta)+'</span>':'')
+    +'<div class="actions li-act"><span>👍 Recomendar</span><span>💬 Comentar</span><span>↗ Compartir</span></div></div>'
+}
+
 /* ── tarjeta ── */
 function tagCls(k,v){
   if(/nivel/i.test(k)) return /pre/i.test(v)?'k-pre':/pos/i.test(v)?'k-pos':/t[eé]c/i.test(v)?'k-tec':'';
@@ -440,6 +457,9 @@ function card(ad){
     med='<span class="medium"><i style="background:var(--google)">G</i>Google Ads</span>';
     screen=googleSerp(ad);
     ctrl='<button class="rot" data-act="rot">↻ Otra combinación de titulares</button>'
+  }else if(ad.medium==='LinkedIn'){
+    med='<span class="medium"><i style="background:var(--linkedin)">in</i>LinkedIn Ads</span>';
+    screen=linkedinFeed(ad)
   }else{
     med='<span class="medium"><i style="background:#000">♪</i>TikTok Ads</span>';
     screen=tiktokScreen(ad)
@@ -465,7 +485,8 @@ function card(ad){
   }
   return '<article class="ad" data-i="'+i+'">'
     +'<div class="stage">'+med+'<div class="phone"><div class="screen">'+screen+'</div></div>'+ctrl+'</div>'
-    +'<div class="info"><div class="prog-n">'+esc(ad.programa||'Campaña general')+'</div>'
+    +'<div class="info"><div class="prog-n">'+esc(ad.programa||(Object.keys(ad.h).length?'Campaña general':'Sin homologar'))+'</div>'
+    +(!Object.keys(ad.h).length?'<div class="tags"><span class="tag warn" title="La campaña no está en la pestaña Homologación del Sheet">Falta en la pestaña Homologación</span></div>':'')
     +(short.length?'<div class="tags">'+short.map(([k,v])=>'<span class="tag '+tagCls(k,v)+'" title="'+esc(k)+'">'+esc(v)+'</span>').join('')+'</div>':'')
     +'<dl class="meta">'+rows.map(([k,v])=>'<dt>'+esc(k)+'</dt><dd>'+(k==='URL'?v:esc(v))+'</dd>').join('')+'</dl>'
     +det
@@ -477,7 +498,7 @@ function card(ad){
 function render(){
   stopVideos();
   const f=filtered(),by=m=>S.ads.filter(a=>a.medium===m).length;
-  $('n-all').textContent=S.ads.length;['Meta','Google','TikTok'].forEach(m=>$('n-'+m).textContent=by(m));
+  $('n-all').textContent=S.ads.length;['Meta','Google','TikTok','LinkedIn'].forEach(m=>$('n-'+m).textContent=by(m));
   $('count').textContent=f.length+(f.length===1?' anuncio':' anuncios');
   $('view').style.display=(S.tab==='all'||S.tab==='Meta')&&by('Meta')?'':'none';
   if(!f.length){
