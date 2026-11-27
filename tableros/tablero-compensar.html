@@ -255,6 +255,12 @@ const GID = { rg: 841916790, metas: 1214988436, base: 1892712454,
   mens: 1685342270,
   // Base CRM de todas las fuentes, agrupada por día: fecha | medio | oferta | modalidad | periodo | conteo
   crm: '1949614656&tq=' + encodeURIComponent('select toDate(G), R, M, E, N, count(A) group by toDate(G), R, M, E, N') };
+// Histórico: la fuente 2025 aporta gasto (RESUMEN GENERAL) y CRM anteriores al CORTE; desde el CORTE manda la fuente vigente.
+// (La hoja 2025 sigue copiando 2026 con periodos viejos y su CRM de feb-2026 es parcial, por eso no se usa desde el corte.)
+const SHEET_OLD = '1BRK2RKcPnLKNQkCRzlTly35EuxmH8ye2RNxjPArjboY', CORTE = '2026-02-01';
+const GVO = (gid, tq) => `https://docs.google.com/spreadsheets/d/${SHEET_OLD}/gviz/tq?tqx=out:csv&gid=${gid}&_cb=${Date.now()}&tq=` + encodeURIComponent(tq);
+const OLD_RG_TQ = `select * where A < date '${CORTE}'`;
+const OLD_CRM_TQ = `select toDate(G), R, M, E, N, count(A) where G < date '${CORTE}' group by toDate(G), R, M, E, N`;
 const MESES = ['','ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 const ACAD = ['Pregrado','Posgrado','Técnico laboral'];
 const GENERAL = 'General', B2B = 'Soluciones empresariales';
@@ -321,13 +327,19 @@ function canalBL(det){ const s = norm(det);
 // ── Carga ────────────────────────────────────────────────────────────────────
 function fetchTab(gid){ return new Promise((ok, ko) => Papa.parse(GV(gid), {download:true, header:false, skipEmptyLines:true,
   complete: r => ok(r.data), error: ko })) }
+function fetchOld(gid, tq){ return new Promise(ok => Papa.parse(GVO(gid, tq), {download:true, header:false, skipEmptyLines:true,
+  complete: r => ok(r.data), error: () => ok([]) })) }
 function load(){
   document.getElementById('loading').style.display = 'flex';
   document.getElementById('ld-msg').textContent = 'Cargando datos...';
-  Promise.all([fetchTab(GID.rg), fetchTab(GID.metas), fetchTab(GID.base), fetchTab(GID.crm), fetchTab(GID.mens).catch(() => [])]).then(([rg, metas, base, crm, mens]) => {
+  Promise.all([fetchTab(GID.rg), fetchTab(GID.metas), fetchTab(GID.base), fetchTab(GID.crm), fetchTab(GID.mens).catch(() => []), fetchOld(GID.rg, OLD_RG_TQ), fetchOld(GID.crm, OLD_CRM_TQ)]).then(([rg, metas, base, crm, mens, rgOld, crmOld]) => {
     // MENSUAL: Periodo | Fecha (1.º del mes) | Mes | Nivel | % Mes | Presupuesto | Meta leads | CPL meta. Solo niveles académicos (sin Branding ni "Sin detalle")
     MENS = mens.slice(1).map(x => ({ mes: iso(x[1]).slice(0,7), niv: String(x[3]||'').trim(), ppto: num(x[5]), lm: num(x[6]) })).filter(m => m.mes && ACAD.includes(m.niv));
     [rg, metas, base].forEach(d => { if(d.length && /^(fecha|periodo|leads)/i.test(String(d[0][0]).trim())) d.shift() });
+    // histórico 2025 (antes del corte) + fuente vigente (desde el corte)
+    if(rgOld.length && /^fecha/i.test(String(rgOld[0][0]).trim())) rgOld.shift();
+    rg = rgOld.filter(x => { const d = iso(x[0]); return d && d < CORTE }).concat(rg.filter(x => { const d = iso(x[0]); return d && d >= CORTE }));
+    crm = crmOld.filter(x => { const d = iso(x[0]); return d && d < CORTE }).concat(crm.filter(x => { const d = iso(x[0]); return d && d >= CORTE }));
     build(rg, metas, base, crm); prepare();
     const t = new Date().toLocaleString('es-CO', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'});
     document.getElementById('last-upd').textContent = 'Datos cargados: ' + t;
